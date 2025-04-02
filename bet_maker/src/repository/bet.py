@@ -3,7 +3,7 @@ from typing import Sequence
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bet_maker.src.schemas.bet import Bet
+from bet_maker.src.database.models.bet import Bet
 
 
 class BetRepository:

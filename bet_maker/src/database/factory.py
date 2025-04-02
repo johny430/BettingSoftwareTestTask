@@ -21,4 +21,3 @@ def create_engine(database_url: str) -> AsyncEngine:
         pool_size=3,
         max_overflow=2
     )
-

@@ -1,11 +1,8 @@
 from decimal import Decimal
-from enum import Enum
-from pydantic import BaseModel, Field
 
-class BetState(Enum):
-    WIN = "WIN"
-    LOSE = "LOSE"
-    PENDING = "PENDING"
+from pydantic import BaseModel
+
+from bet_maker.src.enums.bet import BetState
 
 
 class Bet(BaseModel):

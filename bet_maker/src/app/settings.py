@@ -7,11 +7,11 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
 
-    db_host: str = Field("localhost", alias="POSTGRES_HOST")
-    db_port: int = Field(5532, alias="POSTGRES_PORT")
+    db_host: str = Field("127.0.0.1", alias="POSTGRES_HOST")
+    db_port: int = Field(5432, alias="POSTGRES_PORT")
     db_user: str = Field("postgres", alias="POSTGRES_USER")
-    db_pass: str = Field("postgres", alias="POSTGRES_PASSWORD")
-    db_base: str = Field("postgres", alias="POSTGRES_DB")
+    db_pass: str = Field("1234", alias="POSTGRES_PASSWORD")
+    db_base: str = Field("mrm_db", alias="POSTGRES_DB")
 
     rabbitmq_host: str = Field("localhost", alias="POSTGRES_HOST")
     rabbitmq_port: int = Field(5532, alias="POSTGRES_PORT")

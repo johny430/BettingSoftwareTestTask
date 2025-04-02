@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from bet_maker.src.app.settings import settings
 from bet_maker.src.database.models.base import mapper_registry
 
+
 async def _setup_db(app: FastAPI) -> None:  # pragma: no cover
     """
     Creates connection to the database.
@@ -24,6 +25,7 @@ async def _setup_db(app: FastAPI) -> None:  # pragma: no cover
     )
     app.state.db_engine = engine
     app.state.db_session_factory = session_factory
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:

@@ -1,10 +1,7 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bet_maker.src.database.dependencies import get_db_session
-from bet_maker.src.database.models.bet import Bet
 from bet_maker.src.services.bet import BetService
 
 bet_router = APIRouter()
@@ -30,6 +27,7 @@ bet_router = APIRouter()
 #     return {"id": new_bet_id}
 #
 
-@bet_router.get("/bets", response_model=list[Bet])
+@bet_router.get("/bets")
 async def get_all_bets(db: AsyncSession = Depends(get_db_session)):
+    # return []
     return await BetService.get_all_bets(db)

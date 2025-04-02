@@ -13,3 +13,12 @@ class Bet(BaseModel):
 
     def update_state(self, state: BetState):
         self.state = state
+
+
+class BetCreate(BaseModel):
+    bet_sum: condecimal(max_digits=10, decimal_places=2)  # type: ignore
+    event_id: str
+
+
+class BetCreated(BaseModel):
+    id: int

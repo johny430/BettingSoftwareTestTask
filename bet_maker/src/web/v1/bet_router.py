@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Depends
+from typing import Sequence
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bet_maker.src.database.dependencies import get_db_session
+from bet_maker.src.schemas.bet import Bet, BetCreated, BetCreate
 from bet_maker.src.services.bet import BetService
 
 bet_router = APIRouter()
@@ -15,19 +18,17 @@ bet_router = APIRouter()
 #     return all_available_events
 #
 #
-# @bet_router.post("/bet", response_model=BetIdDto)
-# async def make_bet(
-#     bet_sum_dto: BetCreateDto,
-#     bet_gateway: Annotated[BetGateway, Depends(Stub(BetGateway))],
-#     event_client: Annotated[EventClient, Depends(Stub(EventClient))],
-# ):
-#     new_bet_id = await bet_usecase.make_bet(
-#         bet_gateway, event_client, bet_sum_dto.bet_sum, bet_sum_dto.event_id
-#     )
-#     return {"id": new_bet_id}
-#
+@bet_router.post("/bet", response_model=BetCreated)
+async def make_bet(
+        bet_sum_dto: BetCreate,
+        db: AsyncSession = Depends(get_db_session)
+):
+    new_bet_id = await BetService.create_bet(db, bet_sum_dto)
+    if new_bet_id is None:
+        raise HTTPException(status_code=500, detail="Ошибка при создании ставки")
+    return BetCreated(id=new_bet_id)
 
-@bet_router.get("/bets")
+
+@bet_router.get("/bets", response_model=Sequence[Bet])
 async def get_all_bets(db: AsyncSession = Depends(get_db_session)):
-    # return []
     return await BetService.get_all_bets(db)

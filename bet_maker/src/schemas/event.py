@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from pydantic import BaseModel
-from bet_maker.src.enums.event import EventState
+from enums.event import EventState
 
 
 class Event(BaseModel):

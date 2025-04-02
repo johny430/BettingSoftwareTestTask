@@ -3,10 +3,10 @@ from typing import Sequence
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bet_maker.src.database.dependencies import get_db_session
-from bet_maker.src.schemas.bet import Bet, BetCreated, BetCreate
-from bet_maker.src.schemas.event import Event
-from bet_maker.src.services.bet import BetService
+from database.dependencies import get_db_session
+from schemas.bet import Bet, BetCreated, BetCreate
+from schemas.event import Event
+from services.bet import BetService
 
 bet_router = APIRouter()
 

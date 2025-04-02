@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, condecimal
 
-from bet_maker.src.enums.bet import BetState
+from enums.bet import BetState
 
 
 class Bet(BaseModel):

@@ -5,8 +5,7 @@ from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from bet_maker.src.app.settings import settings
-from bet_maker.src.database.models.base import mapper_registry
-
+from database.models.base import mapper_registry
 
 async def _setup_db(app: FastAPI) -> None:  # pragma: no cover
     """

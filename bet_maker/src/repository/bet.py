@@ -5,8 +5,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bet_maker.src.database.models.bet import Bet
-from bet_maker.src.schemas.bet import BetCreate
+from database.models.bet import Bet
+from schemas.bet import BetCreate
 
 logger = logging.getLogger(__name__)
 

@@ -2,8 +2,8 @@ from typing import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bet_maker.src.repository.bet import BetRepository
-from bet_maker.src.schemas.bet import Bet
+from repository.bet import BetRepository
+from schemas.bet import Bet
 
 
 class BetService:

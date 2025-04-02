@@ -1,6 +1,6 @@
 import uvicorn
 
-from bet_maker.src.app.settings import settings
+from app.settings import settings
 
 
 def main() -> None:

@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from bet_maker.src.database.models.base import BaseModel
+from pydantic import BaseModel
 from bet_maker.src.enums.event import EventState
 
 

@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, condecimal
 
 from bet_maker.src.enums.bet import BetState
 
@@ -16,7 +16,7 @@ class Bet(BaseModel):
 
 
 class BetCreate(BaseModel):
-    bet_sum: condecimal(max_digits=10, decimal_places=2)  # type: ignore
+    sum: condecimal(max_digits=10, decimal_places=2)  # type: ignore
     event_id: str
 
 

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from bet_maker.src.app.lifetime import lifespan
+from bet_maker.src.web.router import router
 
 
 def get_app() -> FastAPI:

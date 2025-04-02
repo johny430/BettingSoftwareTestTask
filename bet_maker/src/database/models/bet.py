@@ -1,9 +1,7 @@
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import text
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import ENUM as PGENUM
 
 from bet_maker.src.database.models.base import TimedBaseModel
 from bet_maker.src.enums.bet import BetState

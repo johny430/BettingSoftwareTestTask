@@ -1,6 +1,8 @@
+import functools
+
 from fastapi import APIRouter, HTTPException, Depends
 
-from services.dependecies import get_service
+from src.services.dependecies import get_service
 from src.schemas.event import EventCreate, EventUpdateStatus
 from src.services.event import EventService
 

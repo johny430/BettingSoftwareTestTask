@@ -27,5 +27,5 @@ async def make_bet(
 
 
 @bet_router.get("/bets", response_model=Sequence[Bet])
-async def get_all_bets(bet_service: BetService = get_service(BetService)):
+async def get_all_bets(bet_service: BetService = Depends(get_service(BetService))):
     return await bet_service.get_all_bets()

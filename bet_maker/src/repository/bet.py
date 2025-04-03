@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class BetRepository(BaseRepository):
 
     async def get_all_bets(self) -> Sequence[Bet]:
-        query = select(Bet).order_by(Bet.created_at)
+        query = select(Bet).order_by(Bet.created_at.desc())
         result = await self.session.execute(query)
         return result.scalars().all()
 

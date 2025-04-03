@@ -19,11 +19,11 @@ class BetRepository(BaseRepository):
         return result.scalars().all()
 
     async def create_bet(self, bet: BetCreate) -> int | None:
-        new_bet = Bet(sum=bet.sum, event_id=bet.event_id)
-        self.session.add(new_bet)
         try:
+            new_bet = Bet(sum=bet.sum, event_id=bet.event_id)
+            self.session.add(new_bet)
             await self.session.commit()
             return new_bet.id
-        except IntegrityError:
-            logger.error("Error in BetGateway")
-        return None
+        except Exception as e:
+            logger.error(e)
+            return None

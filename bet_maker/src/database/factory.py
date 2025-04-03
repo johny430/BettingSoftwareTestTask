@@ -11,7 +11,7 @@ from app.settings import settings
 
 
 async def setup_db(app: FastAPI) -> None:
-    engine = create_async_engine(str(settings.db_url))
+    engine = create_async_engine(str(settings.postgresql_settings.db_url))
     session_factory = async_sessionmaker(
         engine,
         expire_on_commit=False,

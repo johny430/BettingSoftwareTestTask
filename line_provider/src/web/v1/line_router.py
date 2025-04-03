@@ -1,9 +1,8 @@
-import functools
-
 from fastapi import APIRouter, HTTPException, Depends
 
+from src.enums.event import EventState
+from src.schemas.event import EventCreate
 from src.services.dependecies import get_service
-from src.schemas.event import EventCreate, EventUpdateStatus
 from src.services.event import EventService
 
 line_router = APIRouter()
@@ -33,10 +32,10 @@ async def get_events(event_service: EventService = Depends(get_service(EventServ
 @line_router.post("/{event_id}/status")
 async def update_event_status(
         event_id: int,
-        status_update: EventUpdateStatus,
+        status: EventState,
         event_service: EventService = Depends(get_service(EventService))
 ):
-    updated_event = await event_service.update_event_status(event_id, status_update.state)
+    updated_event = await event_service.update_event_status(event_id, status)
     if not updated_event:
         raise HTTPException(status_code=404, detail="Error during event status update")
     return updated_event

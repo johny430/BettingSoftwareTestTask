@@ -16,7 +16,3 @@ class EventResponse(BaseModel):
     coefficient: Decimal
     deadline: int | None
     state: EventState | None
-
-
-class EventUpdateStatus(BaseModel):
-    state: EventState

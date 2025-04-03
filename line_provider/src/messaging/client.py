@@ -22,8 +22,8 @@ class RabbitMQPublisher:
     async def publish(self, message_body: dict) -> None:
         if not self.exchange:
             await self.connect()
-        message = Message(json.dumps(message_body).encode())
-        await self.exchange.publish(message, routing_key=rabbitmq_settings.routing_key)
+        await self.exchange.publish(Message(json.dumps(message_body).encode()),
+                                    routing_key=rabbitmq_settings.routing_key)
 
     async def close(self) -> None:
         if self.connection:

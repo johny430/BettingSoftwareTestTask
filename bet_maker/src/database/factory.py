@@ -1,3 +1,4 @@
+from fastapi import FastAPI
 from sqlalchemy import AsyncAdaptedQueuePool
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -5,6 +6,18 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+
+from app.settings import settings
+
+
+async def _setup_db(app: FastAPI) -> None:  # pragma: no cover
+    engine = create_async_engine(str(settings.db_url))
+    session_factory = async_sessionmaker(
+        engine,
+        expire_on_commit=False,
+    )
+    app.state.db_engine = engine
+    app.state.db_session_factory = session_factory
 
 
 def create_session_maker(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:

@@ -73,8 +73,8 @@ class RedisSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-    host: str = "0.0.0.0"
-    port: int = 8000
+    host: str = "127.0.0.1"
+    port: int = 8080
 
     postgresql_settings: PostgresqlSettings = PostgresqlSettings()
     rabbitmq_settings: RabbitmqSettings = RabbitmqSettings()

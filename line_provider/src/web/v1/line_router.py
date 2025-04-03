@@ -36,7 +36,11 @@ async def update_event_status(
         status_update: EventUpdateStatus,
         event_service: EventService = Depends(get_service(EventService))
 ):
-    updated_event = await event_service.update_event_status(event_id, status_update.state)
-    if updated_event is None:
-        raise HTTPException(status_code=500, detail="Error during event status update")
-    return updated_event
+    try:
+        updated_event = await event_service.update_event_status(event_id, status_update.state)
+        # if updated_event is None:
+        #     raise HTTPException(status_code=500, detail="Error during event status update")
+        return updated_event
+    except Exception as e:
+        print(e)
+    return None

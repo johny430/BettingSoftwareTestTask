@@ -38,7 +38,7 @@ class EventRepository(BaseRepository):
         event = result.scalar_one_or_none()
         if event is None:
             return None
-        event.state = new_status
+        event.state = new_status.name
         self.session.add(event)
         await self.session.commit()
         await self.session.refresh(event)

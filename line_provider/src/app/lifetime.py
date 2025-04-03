@@ -3,8 +3,8 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from database.factory import setup_db
-from database.models.base import mapper_registry
+from src.database.factory import setup_db
+from src.database.models.base import mapper_registry
 
 
 @asynccontextmanager

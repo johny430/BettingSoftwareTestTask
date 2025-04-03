@@ -5,7 +5,7 @@ from sqlalchemy import Numeric, DateTime, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database.models.base import TimedBaseModel
-from enums.event import EventState
+from src.enums.event import EventState
 
 
 class Event(TimedBaseModel):

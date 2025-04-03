@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import (
 from app.settings import settings
 
 
-async def _setup_db(app: FastAPI) -> None:  # pragma: no cover
+async def setup_db(app: FastAPI) -> None:
     engine = create_async_engine(str(settings.db_url))
     session_factory = async_sessionmaker(
         engine,

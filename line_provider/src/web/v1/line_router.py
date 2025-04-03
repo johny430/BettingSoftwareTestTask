@@ -35,8 +35,6 @@ async def update_event_status(
         event_service: EventService = Depends(get_service(EventService))
 ):
     updated_event = await event_service.update_event_status(event_id, status_update.state)
-    print(updated_event)
     if not updated_event:
-        print("not updated_event")
         raise HTTPException(status_code=404, detail="Error during event status update")
     return updated_event

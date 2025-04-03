@@ -1,13 +1,13 @@
 import uvicorn
 
-from app.settings import settings
+from src.app.settings import app_settings
 
 
 def main() -> None:
     uvicorn.run(
         "bet_maker.src.app.application:get_app",
-        host=settings.host,
-        port=settings.port,
+        host=app_settings.host,
+        port=app_settings.port,
         factory=True,
     )
 

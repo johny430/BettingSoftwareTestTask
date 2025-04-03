@@ -3,8 +3,9 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from src.app.setup import setup_rabbitmq, setup_db
+from src.database.dependencies import setup_db
 from src.database.models.base import mapper_registry
+from src.messaging.dependecies import setup_rabbitmq
 
 
 @asynccontextmanager
@@ -17,4 +18,4 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
     await app.state.db_engine.dispose()
-    await app;
+    await app.state.publisher.close();

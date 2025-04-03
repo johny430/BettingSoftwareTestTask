@@ -28,13 +28,13 @@ async def get_events(event_service: EventService = Depends(get_service(EventServ
     return await event_service.get_all_events()
 
 
-@line_router.patch("/{event_id}/status")
+@line_router.post("/{event_id}/status")
 async def update_event_status(
         event_id: int,
         status_update: EventUpdateStatus,
         event_service: EventService = Depends(get_service(EventService))
 ):
     updated_event = await event_service.update_event_status(event_id, status_update.state)
-    if updated_event is None:
-        raise HTTPException(status_code=500, detail="Error during event status update")
+    if not updated_event:
+        raise HTTPException(status_code=404, detail="Error during event status update")
     return updated_event

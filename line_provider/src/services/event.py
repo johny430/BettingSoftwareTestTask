@@ -14,7 +14,8 @@ class EventService(BaseService):
         super().__init__(EventRepository, session)
 
     async def create_event(self, event_data: EventCreate) -> int | None:
-        return await self.repository.create(Event(deadline=event_data.deadline.replace(tzinfo=None), coefficient=event_data.coefficient))
+        return await self.repository.create(
+            Event(deadline=event_data.deadline.replace(tzinfo=None), coefficient=event_data.coefficient))
 
     async def get_event_by_id(self, event_id: int) -> Event | None:
         return await self.repository.get_by_id(event_id)

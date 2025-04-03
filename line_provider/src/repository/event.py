@@ -21,7 +21,6 @@ class EventRepository(BaseRepository):
             logger.error(e)
             return None
 
-
     async def get_by_id(self, event_id: int) -> Event | None:
         query = select(Event).where(Event.id == event_id)
         result = await self.session.execute(query)
@@ -33,12 +32,12 @@ class EventRepository(BaseRepository):
         return result.scalars().all()
 
     async def update_status(self, event_id: int, new_status: EventState) -> Event | None:
-        stmt = select(Event).where(Event.id == event_id)
-        result = await self.session.execute(stmt)
+        query = select(Event).where(Event.id == event_id)
+        result = await self.session.execute(query)
         event = result.scalar_one_or_none()
         if event is None:
             return None
-        event.state = new_status.name
+        event.state = new_status.value
         self.session.add(event)
         await self.session.commit()
         await self.session.refresh(event)

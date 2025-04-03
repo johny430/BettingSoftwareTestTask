@@ -9,6 +9,8 @@ async def get_db_session(request: Request) -> AsyncGenerator[AsyncSession, None]
 
     try:
         yield session
+    except Exception as e:
+        await session.rollback()
     finally:
         await session.commit()
         await session.close()

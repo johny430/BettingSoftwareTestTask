@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from schemas.bet import Bet, BetCreated, BetCreate
 from schemas.event import Event
@@ -18,7 +18,7 @@ async def get_all_available_events():
 @bet_router.post("/bet", response_model=BetCreated)
 async def make_bet(
         bet_sum_dto: BetCreate,
-        bet_service: BetService = get_service(BetService)
+        bet_service: BetService = Depends(get_service(BetService))
 ):
     new_bet_id = await bet_service.create_bet(bet_sum_dto)
     if new_bet_id is None:

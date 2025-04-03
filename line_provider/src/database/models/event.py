@@ -4,7 +4,7 @@ from decimal import Decimal
 from sqlalchemy import Numeric, DateTime, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database.models.base import TimedBaseModel
+from src.database.models.base import TimedBaseModel
 from src.enums.event import EventState
 
 

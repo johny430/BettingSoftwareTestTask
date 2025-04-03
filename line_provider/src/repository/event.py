@@ -12,11 +12,15 @@ logger = logging.getLogger(__name__)
 
 class EventRepository(BaseRepository):
 
-    async def create(self, event: Event) -> Event:
-        self.session.add(event)
-        await self.session.commit()
-        await self.session.refresh(event)
-        return event
+    async def create(self, event: Event) -> int | None:
+        try:
+            self.session.add(event)
+            await self.session.commit()
+            return event.id
+        except Exception as e:
+            logger.error(e)
+            return None
+
 
     async def get_by_id(self, event_id: int) -> Event | None:
         query = select(Event).where(Event.id == event_id)

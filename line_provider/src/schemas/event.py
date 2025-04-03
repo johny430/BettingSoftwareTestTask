@@ -1,20 +1,19 @@
+from dataclasses import Field
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, condecimal
 
 from enums.event import EventState
 
 
 class EventCreate(BaseModel):
-    coefficient: Decimal
+    coefficient: condecimal(max_digits=10, decimal_places=2, gt=0)
     deadline: datetime
-    state: EventState = EventState.NEW  # Optional, defaults to NEW
-
 
 class EventResponse(BaseModel):
-    event_id: str
-    coefficient: Decimal | None
+    id: int
+    coefficient: Decimal
     deadline: int | None
     state: EventState | None
 

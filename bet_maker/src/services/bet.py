@@ -1,5 +1,7 @@
 from typing import Sequence
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from repository.bet import BetRepository
 from schemas.bet import Bet
 from services.base import BaseService
@@ -7,8 +9,8 @@ from services.base import BaseService
 
 class BetService(BaseService):
 
-    def __init__(self, session):
-        self.repository = BetRepository(session)
+    def __init__(self, session: AsyncSession):
+        super().__init__(BetRepository, session)
 
     async def get_all_bets(self) -> Sequence[Bet]:
         all_bets = await self.repository.get_all_bets()

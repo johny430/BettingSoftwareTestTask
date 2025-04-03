@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from web.v1.bet_router import bet_router
+from line_provider.src.web.v1.line_router import line_router
 
 router = APIRouter()
-router.include_router(bet_router)
+router.include_router(line_router)

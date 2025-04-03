@@ -5,15 +5,9 @@ from starlette.requests import Request
 
 
 async def get_db_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
-    """
-    Create and get database session.
-
-    :param request: current request.
-    :yield: database session.
-    """
     session: AsyncSession = request.app.state.db_session_factory()
 
-    try:  # noqa: WPS501
+    try:
         yield session
     finally:
         await session.commit()

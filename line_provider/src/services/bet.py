@@ -4,19 +4,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from repository.bet import BetRepository
 from schemas.bet import Bet
+from services.base import BaseService
 
 
-class BetService:
-    repository = BetRepository
+class BetService(BaseService):
 
-    @classmethod
-    async def get_all_bets(cls, session: AsyncSession) -> Sequence[Bet]:
-        all_bets = await cls.repository.get_all_bets(session)
+    def __init__(self, session: AsyncSession):
+        super().__init__(BetRepository, session)
+
+    async def get_all_bets(self) -> Sequence[Bet]:
+        all_bets = await self.repository.get_all_bets()
         return [
             Bet(id=bet.id, state=bet.state, sum=bet.sum, event_id=bet.event_id)
             for bet in all_bets
         ]
 
-    @classmethod
-    async def create_bet(cls, session: AsyncSession, created_bet) -> int | None:
-        return await cls.repository.create_bet(session, created_bet)
+    async def create_bet(self, created_bet) -> int | None:
+        return await self.repository.create_bet(created_bet)

@@ -2,16 +2,18 @@ import logging
 from typing import Sequence
 
 from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models.bet import Bet
-from repository.base import BaseRepository
 from schemas.bet import BetCreate
 
 logger = logging.getLogger(__name__)
 
 
-class BetRepository(BaseRepository):
+class BetRepository:
+
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
     async def get_all_bets(self) -> Sequence[Bet]:
         query = select(Bet).order_by(Bet.created_at.desc())

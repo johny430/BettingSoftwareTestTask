@@ -4,14 +4,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.event import Event
 from src.enums.event import EventState
+from src.messaging.client import RabbitMQPublisher
 from src.repository.event import EventRepository
+from src.repository.event_sender import EventsenderRepository
 from src.schemas.event import EventCreate
 
 
 class EventService:
 
-    def __init__(self, session: AsyncSession, event_sender):
-        self.event_sender = event_sender
+    def __init__(self, session: AsyncSession, publisher: RabbitMQPublisher):
+        self.event_sender = EventsenderRepository(publisher)
         self.repository = EventRepository(session)
 
     async def create_event(self, event_data: EventCreate) -> Event | None:

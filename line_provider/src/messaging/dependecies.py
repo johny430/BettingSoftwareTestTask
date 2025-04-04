@@ -8,5 +8,6 @@ async def setup_rabbitmq(app: FastAPI) -> None:
     app.state.publisher = RabbitMQPublisher()
     await app.state.publisher.connect()
 
+
 async def get_rabbitmq_client(request: Request):
-    return request.app.state.publisher
+    yield request.app.state.publisher

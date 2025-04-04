@@ -9,6 +9,8 @@ class RedisSettings(BaseSettings):
     redis_password: str = Field("", alias="REDIS_PASSWORD")
     redis_db: int = Field(0, alias="REDIS_DB")
 
+    cache_ttl: int = 10
+
     @property
     def redis_url(self) -> URL:
         return URL.build(

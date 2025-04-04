@@ -9,5 +9,5 @@ async def setup_redis(app: FastAPI) -> None:
     await app.state.cache.connect()
 
 
-async def get_rabbitmq_client(request: Request):
+async def get_redis_client(request: Request):
     yield request.app.state.cache

@@ -3,19 +3,16 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from caching.dependecies import setup_redis
-from database.factory import setup_db
-from database.models.base import mapper_registry
+from caching.dependecies import setup_redis, close_redis_connection
+from database.factory import setup_database, close_database_connection
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    await setup_db(app)
+    await setup_database(app)
     await setup_redis(app)
-
-    async with app.state.db_engine.begin() as conn:
-        await conn.run_sync(mapper_registry.metadata.create_all)
 
     yield
 
-    await app.state.db_engine.dispose()
+    await close_database_connection(app)
+    await close_redis_connection(app)

@@ -8,7 +8,7 @@ class RedisClient:
         self.redis = None
 
     async def connect(self):
-        self.redis = await aioredis.from_url(redis_settings.redis_url, decode_responses=True)
+        self.redis = await aioredis.from_url(str(redis_settings.redis_url), decode_responses=True)
 
     async def get(self, key: str):
         return await self.redis.get(key)

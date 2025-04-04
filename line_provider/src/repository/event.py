@@ -2,15 +2,18 @@ import logging
 from typing import Sequence
 
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from repository.base import BaseRepository
 from src.database.models.event import Event
 from src.enums.event import EventState
 
 logger = logging.getLogger(__name__)
 
 
-class EventRepository(BaseRepository):
+class EventRepository:
+
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
     async def create(self, event: Event) -> Event | None:
         try:

@@ -1,5 +1,3 @@
-import asyncio
-
 import aio_pika
 from aio_pika import ExchangeType
 
@@ -29,12 +27,9 @@ class RabbitMQClient:
             self.queue_status_updated = await self.channel.declare_queue("event_status_updated_queue", durable=True)
             await self.queue_status_updated.bind(self.exchange, routing_key="event.status.updated")
 
-    async def consume(self):
-        await self.queue_created.consume(self.on_message)
-        await self.queue_status_updated.consume(self.on_message)
-
-        print(" [*] Waiting for messages. To exit press CTRL+C")
-        await asyncio.Future()  # Run forever
+    async def consume(self, queue_created_handler, queue_status_updated_handler):
+        await self.queue_created.consume(queue_created_handler)
+        await self.queue_status_updated.consume(queue_status_updated_handler)
 
     async def close(self) -> None:
         if self.connection:

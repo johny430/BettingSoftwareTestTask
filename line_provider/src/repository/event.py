@@ -12,11 +12,12 @@ logger = logging.getLogger(__name__)
 
 class EventRepository(BaseRepository):
 
-    async def create(self, event: Event) -> int | None:
+    async def create(self, event: Event) -> Event | None:
         try:
             self.session.add(event)
             await self.session.commit()
-            return event.id
+            await self.session.refresh(event)
+            return event
         except Exception as e:
             logger.error(e)
             return None
@@ -27,21 +28,13 @@ class EventRepository(BaseRepository):
         return result.scalar_one_or_none()
 
     async def get_all(self) -> Sequence[Event]:
-        stmt = select(Event)
-        result = await self.session.execute(stmt)
+        query = select(Event)
+        result = await self.session.execute(query)
         return result.scalars().all()
 
     async def update_status(self, event_id: int, new_status: EventState) -> Event | None:
-        query = select(Event).where(Event.id == event_id)
-        result = await self.session.execute(query)
-        event = result.scalar_one_or_none()
+        event = await self.get_by_id(event_id)
         if event is None:
             return None
         event.state = new_status.name
-        try:
-            self.session.add(event)
-            await self.session.commit()
-            await self.session.refresh(event)
-            return event
-        except Exception as e:
-            print(e)
+        return await self.create(event)

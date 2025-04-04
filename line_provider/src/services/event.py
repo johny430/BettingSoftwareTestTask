@@ -17,8 +17,10 @@ class EventService(BaseService):
 
     async def create_event(self, event_data: EventCreate) -> int | None:
         created_event = await self.repository.create(
-            Event(deadline=event_data.deadline.replace(tzinfo=None), coefficient=event_data.coefficient))
+            Event(deadline=event_data.deadline.replace(tzinfo=None), coefficient=event_data.coefficient)
+        )
         await self.publisher.publish(created_event, "event.created")
+        return created_event
 
     async def get_event_by_id(self, event_id: int) -> Event | None:
         return await self.repository.get_by_id(event_id)
@@ -28,5 +30,5 @@ class EventService(BaseService):
 
     async def update_event_status(self, event_id: int, new_status: EventState) -> Event | None:
         updated_event = await self.repository.update_status(event_id, new_status)
-        await self.publisher.publish(updated_event, "event.updated")
+
         return updated_event

@@ -1,36 +1,41 @@
 import asyncio
 
 import aio_pika
+from aio_pika import ExchangeType
+
+from src.messaging.settings import rabbitmq_settings
 
 
-async def on_message(message):
-    async with message.process():
-        print("Received message:", message.body.decode())
+class RabbitMQClient:
+    def __init__(self):
+        self.queue_created = None
+        self.queue_status_updated = None
+        self.connection = None
+        self.channel = None
+        self.exchange = None
+        self.on_message = None
 
+    async def connect(self) -> None:
+        self.connection = await aio_pika.connect_robust(rabbitmq_settings.amqp_url)
+        self.channel = await self.connection.channel()
+        self.exchange = await self.channel.declare_exchange(
+            rabbitmq_settings.exchange_name, ExchangeType.TOPIC
+        )
 
-async def main():
-    # Connect to RabbitMQ (adjust connection URL as needed)
-    connection = await aio_pika.connect_robust("amqp://guest:guest@localhost/")
-    async with connection:
-        channel = await connection.channel()
-        # Declare a topic exchange
-        exchange = await channel.declare_exchange("events_exchange", aio_pika.ExchangeType.TOPIC)
+    async def declare_queues(self):
+        async with self.connection:
+            self.queue_created = await self.channel.declare_queue("event_created_queue", durable=True)
+            await self.queue_created.bind(self.exchange, routing_key="event.created")
+            self.queue_status_updated = await self.channel.declare_queue("event_status_updated_queue", durable=True)
+            await self.queue_status_updated.bind(self.exchange, routing_key="event.status.updated")
 
-        # Declare and bind the queue for event creations
-        queue_created = await channel.declare_queue("event_created_queue", durable=True)
-        await queue_created.bind(exchange, routing_key="event.created")
-
-        # Declare and bind the queue for status updates
-        queue_status_updated = await channel.declare_queue("event_status_updated_queue", durable=True)
-        await queue_status_updated.bind(exchange, routing_key="event.status.updated")
-
-        # Start consuming messages from both queues
-        await queue_created.consume(on_message)
-        await queue_status_updated.consume(on_message)
+    async def consume(self):
+        await self.queue_created.consume(self.on_message)
+        await self.queue_status_updated.consume(self.on_message)
 
         print(" [*] Waiting for messages. To exit press CTRL+C")
-        await asyncio.Future()  # run forever
+        await asyncio.Future()  # Run forever
 
-
-if __name__ == "__main__":
-    asyncio.run(main())
+    async def close(self) -> None:
+        if self.connection:
+            await self.connection.close()

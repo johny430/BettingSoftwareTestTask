@@ -1,6 +1,6 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings
-from sqlalchemy import URL
+from yarl import URL
 
 
 class RedisSettings(BaseSettings):

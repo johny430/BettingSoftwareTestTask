@@ -7,11 +7,11 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from app.settings import settings
+from src.database.settings import postgres_settings
 
 
 async def setup_db(app: FastAPI) -> None:
-    engine = create_async_engine(str(settings.postgresql_settings.db_url))
+    engine = create_async_engine(str(postgres_settings.postgresql_settings.db_url))
     session_factory = async_sessionmaker(
         engine,
         expire_on_commit=False,

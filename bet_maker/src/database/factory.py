@@ -8,7 +8,7 @@ from src.database.settings import postgres_settings
 
 
 async def start_database_connection():
-    engine = create_async_engine(str(postgres_settings.postgresql_settings.db_url))
+    engine = create_async_engine(str(postgres_settings.db_url))
     session_factory = async_sessionmaker(
         engine,
         expire_on_commit=False,

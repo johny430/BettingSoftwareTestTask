@@ -16,6 +16,11 @@ async def get_all_available_events(event_service: Annotated[EventService, Depend
     return event_service.get_all()
 
 
+@bet_router.get("/eventss", response_model=Sequence[EventResponse])
+async def get_all_available_events(event_service: Annotated[EventService, Depends(get_event_service)]):
+    raise HTTPException(status_code=500, detail="Ошибка при создании ставки")
+
+
 @bet_router.post("/bet", response_model=BetCreated)
 async def make_bet(
         bet_sum_dto: BetCreate,

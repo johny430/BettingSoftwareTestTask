@@ -18,4 +18,4 @@ class RedisClient:
         return await self.redis.get(key)
 
     async def set(self, key: str, value: str, expire: int = None):
-        return await self.redis.setex(key, vakue=value, ex=expire)
+        return await self.redis.setex(key, expire, value)

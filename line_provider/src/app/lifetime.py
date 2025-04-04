@@ -18,4 +18,4 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
     await app.state.db_engine.dispose()
-    await app.state.publisher.close();
+    await app.state.publisher.close()

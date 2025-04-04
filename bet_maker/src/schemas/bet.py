@@ -5,7 +5,7 @@ from pydantic import BaseModel, condecimal
 from enums.bet import BetState
 
 
-class Bet(BaseModel):
+class BetResponse(BaseModel):
     id: int | None
     state: BetState
     sum: Decimal

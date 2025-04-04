@@ -4,22 +4,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.event import Event
 from src.enums.event import EventState
-from src.messaging.client import RabbitMQPublisher
 from src.repository.event import EventRepository
+from src.repository.event_sender import EventsenderRepository
 from src.schemas.event import EventCreate, EventResponse
 from src.services.base import BaseService
 
 
 class EventService(BaseService):
-    def __init__(self, session: AsyncSession, publisher: RabbitMQPublisher):
+    def __init__(self, session: AsyncSession, event_sender: EventsenderRepository):
         super().__init__(EventRepository, session)
-        self.publisher = publisher
+        self.event_sender = event_sender
 
-    async def create_event(self, event_data: EventCreate) -> int | None:
+    async def create_event(self, event_data: EventCreate) -> Event | None:
         created_event = await self.repository.create(
             Event(deadline=event_data.deadline.replace(tzinfo=None), coefficient=event_data.coefficient)
         )
-        await self.publisher.publish(created_event, "event.created")
+        await self.event_sender.send_event_created_message(created_event)
         return created_event
 
     async def get_event_by_id(self, event_id: int) -> Event | None:
@@ -30,5 +30,5 @@ class EventService(BaseService):
 
     async def update_event_status(self, event_id: int, new_status: EventState) -> Event | None:
         updated_event = await self.repository.update_status(event_id, new_status)
-
+        await self.event_sender.send_event_created_message(updated_event)
         return updated_event

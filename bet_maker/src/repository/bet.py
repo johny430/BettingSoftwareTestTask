@@ -2,7 +2,7 @@ import logging
 from typing import Sequence
 
 from aiormq.tools import awaitable
-from sqlalchemy import select
+from sqlalchemy import select, Update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models.bet import Bet
@@ -32,12 +32,10 @@ class BetRepository:
             logger.error(e)
             return None
 
-    async def update_bet_status(self, bet_id: int, state: BetState):
-        query = select(Bet).where(Bet.id == bet_id)
-        result = await self.session.execute(query)
-        bet = result.scalar_one_or_none()
-        if not bet:
-            return
-        bet.state = state
-        self.session.add(bet)
-        await self.session.commit()
+    async def update_bets_status_by_event_id(self, event_id: int, status: BetState):
+        try:
+            query = Update(Bet).where(Bet.event_id == event_id).values(state = status)
+            await self.session.execute(query)
+            return True
+        except Exception:
+            return False

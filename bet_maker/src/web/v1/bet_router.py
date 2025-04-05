@@ -1,12 +1,8 @@
-from datetime import datetime
-from random import randint
 from typing import Sequence, Annotated
 
 from fastapi import APIRouter, HTTPException, Depends
 
-from enums.event import EventState
 from schemas.bet import BetResponse, BetCreated, BetCreate
-from schemas.event import EventSchema
 from services.bet import BetService
 from services.dependecies import get_event_service, get_bet_service
 from services.event import EventService
@@ -16,9 +12,6 @@ bet_router = APIRouter()
 
 @bet_router.get("/events")
 async def get_all_available_events(event_service: Annotated[EventService, Depends(get_event_service)]):
-    await event_service.add_event(
-        EventSchema(id=randint(1, 100), coefficient=1, deadline=int(datetime.now().timestamp() + 120),
-                    state=EventState.FINISHED_WIN))
     return await event_service.get_all()
 
 

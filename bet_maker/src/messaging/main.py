@@ -20,7 +20,10 @@ async def main():
 
     await rabbitmq_client.connect()
     await rabbitmq_client.declare_queues()
-    await rabbitmq_client.consume(process_created_events, partial(process_updated_events, bet_service=bet_service))
+    await rabbitmq_client.consume(
+        partial(process_created_events, event_service=event_service),
+        partial(process_updated_events, bet_service=bet_service)
+    )
 
     print("Waiting for messages")
     try:

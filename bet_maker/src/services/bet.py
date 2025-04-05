@@ -7,7 +7,6 @@ from caching.client import RedisClient
 from database.models.bet import Bet
 from enums.bet import BetState
 from repository.event import EventRepository
-from schemas.bet import BetResponse
 
 
 class BetService:

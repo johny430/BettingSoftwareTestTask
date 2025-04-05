@@ -25,4 +25,5 @@ class PostgresqlSettings(BaseSettings):
         populate_by_name = True
         env_prefix = ""
 
+
 postgres_settings = PostgresqlSettings()

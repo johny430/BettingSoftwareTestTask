@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import (
 from starlette.requests import Request
 
 from database.models.base import mapper_registry
+from repository.bet import logger
 from src.database.settings import postgres_settings
 
 
@@ -37,6 +38,7 @@ async def get_db_session(request: Request) -> AsyncGenerator[AsyncSession, None]
         try:
             yield session
         except Exception as e:
+            logger.error(e)
             await session.rollback()
             raise
         finally:

@@ -3,12 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from caching.client import RedisClient
 from caching.dependecies import get_redis_client
-from database.dependencies import get_db_session
+from database.dependencies import get_database_session
 from services.bet import BetService
 from services.event import EventService
 
 
-def get_bet_service(database_session: AsyncSession = Depends(get_db_session)):
+def get_bet_service(database_session: AsyncSession = Depends(get_database_session)):
     yield BetService(database_session)
 
 

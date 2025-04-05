@@ -2,6 +2,7 @@ import aioredis
 from aioredis import Redis
 
 from caching.settings import redis_settings
+from utils import safe_json_loads
 
 
 class RedisClient:
@@ -14,8 +15,11 @@ class RedisClient:
     async def close(self):
         await self.redis.close()
 
-    async def get(self, key: str):
-        return await self.redis.get(key)
+    async def get_by_prefix(self, key_prefix: str):
+        keys = await self.redis.keys(f"{key_prefix}*")
+        if not keys:
+            return []
+        return [value for value in map(safe_json_loads, await self.redis.mget(*keys)) if value is not None]
 
-    async def set(self, key: str, value: str, expire: int = None):
-        return await self.redis.setex(key, expire, value)
+    async def set(self, key: str, value: str, ttl: int):
+        return await self.redis.setex(key, ttl, value)

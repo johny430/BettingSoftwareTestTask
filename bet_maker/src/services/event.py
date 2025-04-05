@@ -1,5 +1,6 @@
 from caching.client import RedisClient
 from repository.event import EventRepository
+from schemas.event import EventSchema
 
 
 class EventService:
@@ -8,4 +9,7 @@ class EventService:
         self.repository = EventRepository(client)
 
     async def get_all(self):
-        return self.repository.get_all()
+        return await self.repository.get_all()
+
+    async def add_event(self, event: EventSchema):
+        return await self.repository.add_event(event)

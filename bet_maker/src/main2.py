@@ -156,8 +156,8 @@ async def on_message(message: aio_pika.IncomingMessage):
     async with message.process():
         try:
             data = json.loads(message.body.decode())
-            name = data.get("name")
-            description = data.get("description")
+            name = data.get_by_prefix("name")
+            description = data.get_by_prefix("description")
             if not name:
                 print("Message missing 'name'; skipping.")
                 return

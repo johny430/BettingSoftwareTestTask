@@ -1,6 +1,8 @@
-import json
+from datetime import datetime
 
 from caching.client import RedisClient
+from caching.settings import redis_settings
+from schemas.event import EventResponse, EventSchema
 
 
 class EventRepository:
@@ -9,7 +11,13 @@ class EventRepository:
         self.client = client
 
     async def get_all(self):
-        return await self.client.get("cached_events")
+        events = await self.client.get_by_prefix(redis_settings.event_cache_key)
+        a = [EventResponse(**event) for event in events]
+        return a
 
-    async def add_event(self, event):
-        await self.client.set("cached_events", json.dumps(event))
+    async def add_event(self, event: EventSchema):
+        key = f"{redis_settings.event_cache_key}:{event.id}"
+        ttl = int(event.deadline - datetime.now().timestamp())
+        if ttl < 0:
+            return
+        await self.client.set(key, event.model_dump_json(), ttl)

@@ -32,5 +32,5 @@ class EventService:
     async def update_event_status(self, event_id: int, new_status: EventState) -> Event | None:
         updated_event = await self.repository.update_status(event_id, new_status)
         if updated_event:
-            await self.event_sender.send_event_created_message(updated_event)
+            await self.event_sender.send_event_status_updated_message(updated_event)
         return updated_event

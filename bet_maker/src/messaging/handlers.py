@@ -1,16 +1,15 @@
 from aio_pika import IncomingMessage
 
-from repository.bet import BetRepository
-from repository.event import EventRepository
 
-
-async def process_created_events(event_repository: EventRepository, message: IncomingMessage):
+async def process_created_events(message: IncomingMessage):
     async with message.process():
-        event = message.body.decode()
-        await event_repository.add_event(event)
+        print(f"created: {message.body.decode()}")
+        # event = message.body.decode()
+        # await event_repository.add_event(event)
 
 
-async def process_updated_events(bet_repository: BetRepository, message: IncomingMessage):
+async def process_updated_events(message: IncomingMessage):
     async with message.process():
-        body: dict = message.body.decode()
-        await bet_repository.update_bet_status(body['id'], body['state'])
+        print(f"updated: {message.body.decode()}")
+        # body: dict = message.body.decode()
+        # await bet_repository.update_bet_status(body['id'], body['state'])

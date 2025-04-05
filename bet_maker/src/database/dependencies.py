@@ -12,7 +12,7 @@ from src.database.settings import postgres_settings
 
 
 def create_db_state():
-    engine = create_async_engine(str(postgres_settings.db_url), echo=True, future=True)
+    engine = create_async_engine(str(postgres_settings.db_url), future=True)
     session_maker = async_sessionmaker(
         bind=engine,
         expire_on_commit=False,

@@ -1,9 +1,10 @@
 import asyncio
 from functools import partial
 
+from database.factory import start_database_connection
+
 from caching.client import RedisClient
 from database.dependencies import get_db_session
-from database.factory import start_database_connection
 from messaging.client import RabbitMQClient
 from messaging.handlers import process_created_events, process_updated_events
 from repository.bet import BetRepository
@@ -24,7 +25,7 @@ async def main():
         partial(process_created_events, EventRepository(redis_client)),
         partial(process_updated_events, BetRepository(next(get_db_session(session_factory))))
     )
-    print(" [*] Waiting for messages. To exit press CTRL+C")
+
     await asyncio.Future()  # Run forever
 
 

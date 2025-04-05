@@ -5,26 +5,38 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from starlette.requests import Request
 
+from src.database.models.base import mapper_registry
 from src.database.settings import postgres_settings
 
 
-async def setup_db(app: FastAPI) -> None:
-    engine = create_async_engine(str(postgres_settings.db_url))
-    session_factory = async_sessionmaker(
-        engine,
+def create_database_connection():
+    engine = create_async_engine(str(postgres_settings.db_url), future=True)
+    session_maker = async_sessionmaker(
+        bind=engine,
         expire_on_commit=False,
+        class_=AsyncSession
     )
-    app.state.db_engine = engine
-    app.state.db_session_factory = session_factory
+    return engine, session_maker
 
 
-async def get_db_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
-    session: AsyncSession = request.app.state.db_session_factory()
+async def setup_database(app: FastAPI):
+    app.state.db_engine, app.state.db_session_factory = create_database_connection()
 
-    try:
-        yield session
-    except Exception as e:
-        await session.rollback()
-    finally:
-        await session.commit()
-        await session.close()
+    async with app.state.db_engine.begin() as conn:
+        await conn.run_sync(mapper_registry.metadata.create_all)
+
+
+async def close_database_connection(app: FastAPI):
+    await app.state.db_engine.dispose()
+
+
+async def get_database_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
+    async with request.app.state.db_session_factory() as session:
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.commit()
+            await session.close()

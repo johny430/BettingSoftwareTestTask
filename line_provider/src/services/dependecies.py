@@ -1,7 +1,7 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.dependencies import get_database_session
+from src.database.dependencies import get_database_session
 from src.messaging.client import RabbitMQPublisher
 from src.messaging.dependecies import get_rabbitmq_client
 from src.services.event import EventService

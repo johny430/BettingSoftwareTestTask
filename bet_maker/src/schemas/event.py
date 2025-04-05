@@ -13,6 +13,7 @@ class EventSchema(BaseModel):
 
 
 class EventResponse(BaseModel):
+    id: int
     coefficient: Decimal
     deadline: int | None
     state: EventState | None

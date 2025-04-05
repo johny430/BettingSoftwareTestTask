@@ -22,7 +22,7 @@ class RedisClient:
         return [value for value in map(safe_json_loads, await self.redis.mget(*keys)) if value is not None]
 
     async def get(self, key):
-        return safe_json_loads(self.redis.get(key))
+        return safe_json_loads(await self.redis.get(key))
 
     async def set(self, key: str, value: str, ttl: int):
         return await self.redis.setex(key, ttl, value)

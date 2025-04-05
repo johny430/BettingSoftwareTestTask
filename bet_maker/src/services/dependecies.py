@@ -8,8 +8,11 @@ from services.bet import BetService
 from services.event import EventService
 
 
-def get_bet_service(database_session: AsyncSession = Depends(get_database_session)):
-    yield BetService(database_session)
+def get_bet_service(
+        database_session: AsyncSession = Depends(get_database_session),
+        redis_client: RedisClient = Depends(get_redis_client)
+):
+    yield BetService(database_session, redis_client)
 
 
 def get_event_service(redis_client: RedisClient = Depends(get_redis_client)):

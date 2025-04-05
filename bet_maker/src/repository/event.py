@@ -11,9 +11,7 @@ class EventRepository:
         self.client = client
 
     async def get_all(self):
-        events = await self.client.get_by_prefix(redis_settings.event_cache_key)
-        a = [EventResponse(**event) for event in events]
-        return a
+        return [EventResponse(**event) for event in await self.client.get_by_prefix(redis_settings.event_cache_key)]
 
     async def add_event(self, event: EventSchema):
         key = f"{redis_settings.event_cache_key}:{event.id}"
@@ -21,3 +19,6 @@ class EventRepository:
         if ttl < 0:
             return
         await self.client.set(key, event.model_dump_json(), ttl)
+
+    async def get_by_id(self, event_id: int):
+        return await self.client.get(f"{redis_settings.event_cache_key}:{event_id}")

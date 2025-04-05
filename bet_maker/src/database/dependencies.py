@@ -11,7 +11,7 @@ from database.models.base import mapper_registry
 from src.database.settings import postgres_settings
 
 
-def create_db_state():
+def create_database_connection():
     engine = create_async_engine(str(postgres_settings.db_url), future=True)
     session_maker = async_sessionmaker(
         bind=engine,
@@ -22,7 +22,7 @@ def create_db_state():
 
 
 async def setup_database(app: FastAPI):
-    app.state.db_engine, app.state.db_session_factory = create_db_state()
+    app.state.db_engine, app.state.db_session_factory = create_database_connection()
 
     async with app.state.db_engine.begin() as conn:
         await conn.run_sync(mapper_registry.metadata.create_all)

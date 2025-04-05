@@ -9,6 +9,7 @@ def get_app() -> FastAPI:
         lifespan=lifespan,
         version="1.0.0",
         docs_url="/api/docs",
+        title="Line Provider"
     )
     app.include_router(router=router, prefix="/api")
 

@@ -29,4 +29,3 @@ async def process_updated_events(message: IncomingMessage, bet_service: BetServi
             body['event_id'],
             get_bet_status_base_on_event_state(EventState(body['state']))
         )
-        print("done")

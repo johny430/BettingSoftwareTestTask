@@ -24,8 +24,6 @@ async def main():
         partial(process_created_events, event_service=event_service),
         partial(process_updated_events, bet_service=bet_service)
     )
-
-    print("Waiting for messages")
     try:
         await asyncio.Future()
     except asyncio.CancelledError:

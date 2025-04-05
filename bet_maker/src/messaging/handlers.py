@@ -2,6 +2,8 @@ import json
 
 from aio_pika import IncomingMessage
 
+from enums.converter import get_bet_status_base_on_event_state
+from enums.event import EventState
 from schemas.event import EventSchema
 from services.bet import BetService
 from services.event import EventService
@@ -22,7 +24,9 @@ async def process_updated_events(message: IncomingMessage, bet_service: BetServi
     async with message.process():
         body = json.loads(message.body.decode())
         if 'event_id' not in body or 'state' not in body:
-            print('sadasdasd')
             return
-        await bet_service.update_status_by_event_id(body['event_id'], body['state'])
+        await bet_service.update_status_by_event_id(
+            body['event_id'],
+            get_bet_status_base_on_event_state(EventState(body['state']))
+        )
         print("done")

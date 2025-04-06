@@ -8,7 +8,6 @@ from yarl import URL
 class RedisSettings(BaseSettings):
     redis_host: str = Field(alias="REDIS_HOST")
     redis_port: int = Field(alias="REDIS_PORT")
-    redis_password: str = Field(alias="REDIS_PASSWORD")
     redis_db: int = Field(alias="REDIS_DB")
 
     cache_ttl: int = 100

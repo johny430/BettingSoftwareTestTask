@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel
 
-from enums.event import EventState
+from src.enums.event import EventState
 
 
 class EventSchema(BaseModel):

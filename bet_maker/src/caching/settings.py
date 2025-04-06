@@ -19,8 +19,6 @@ class RedisSettings(BaseSettings):
             scheme="redis",
             host=self.redis_host,
             port=self.redis_port,
-            user=None,
-            password=self.redis_password,
             path=f"/{self.redis_db}"
         )
 

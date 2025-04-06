@@ -172,12 +172,12 @@ services:
     build:
       context: bet_maker
       dockerfile: Dockerfile
-    env_file: line_provider/.env
+    env_file: bet_maker/.env
     command: [ "python", "src/main.py" ]
     ports:
       - "8090:8090"
     depends_on:
-      - line_provider_database
+      - bet_maker_database
       - rabbitmq
 
 volumes:

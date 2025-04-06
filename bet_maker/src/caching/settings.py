@@ -6,10 +6,10 @@ from yarl import URL
 
 
 class RedisSettings(BaseSettings):
-    redis_host: str = Field("localhost", alias="REDIS_HOST")
-    redis_port: int = Field(6379, alias="REDIS_PORT")
-    redis_password: str = Field("", alias="REDIS_PASSWORD")
-    redis_db: int = Field(0, alias="REDIS_DB")
+    redis_host: str = Field(alias="REDIS_HOST")
+    redis_port: int = Field(alias="REDIS_PORT")
+    redis_password: str = Field(alias="REDIS_PASSWORD")
+    redis_db: int = Field(alias="REDIS_DB")
 
     cache_ttl: int = 100
     event_cache_key: str = "cached_events"

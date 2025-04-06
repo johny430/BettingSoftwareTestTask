@@ -66,6 +66,7 @@ services:
       context: ./line_provider
       dockerfile: Dockerfile
     container_name: line_provider
+    command: [ "python", "messaging/main.py" ]
     restart: always
     depends_on:
       postgres_line:
@@ -78,9 +79,28 @@ services:
       - "8000:8000"
   bet_maker:
     build:
-      context: ./bet
+      context: ./bet_maker
       dockerfile: Dockerfile
     container_name: bet-maker
+    command: [ "python", "messaging/main.py" ]
+    restart: always
+    depends_on:
+      postgres_bet:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      line_provider:
+        condition: service_started
+    networks:
+      - app-network
+    ports:
+      - "8001:8001"
+  bet_maker_consumer:
+    build:
+      context: ./bet_maker
+      dockerfile: Dockerfile
+    container_name: bet-maker-consumer
+    command: [ "python", "messaging/main.py" ]
     restart: always
     depends_on:
       postgres_bet:

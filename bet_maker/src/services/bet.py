@@ -2,7 +2,7 @@ from typing import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bet_maker.src.repository.bet import BetRepository
+from repository.bet import BetRepository
 from caching.client import RedisClient
 from database.models.bet import Bet
 from enums.bet import BetState

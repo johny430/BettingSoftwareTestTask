@@ -123,7 +123,7 @@
 version: '3.8'
 
 services:
-  db:
+  line_provider_database:
     image: postgres:alpine
     env_file: line_provider/.env
     ports:
@@ -132,14 +132,24 @@ services:
       - postgres_data2:/var/lib/postgresql/data
 
 
-  rabbit:
+  rabbitmq:
     image: rabbitmq:3-management
     env_file: line_provider/.env
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
 
-  app:
+  redis:
+    image: redis:7
+    env_file: bet_maker/.env
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  line_provider:
     build:
       context: line_provider
       dockerfile: Dockerfile
@@ -148,8 +158,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
-      - rabbit
+      - line_provider_database
+      - rabbitmq
 
 volumes:
   postgres_data2:
+  redis_data:
+  rabbitmq_data:

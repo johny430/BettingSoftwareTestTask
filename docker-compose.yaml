@@ -16,6 +16,13 @@ services:
       - "5433:5432"
     volumes:
       - bet_makers_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -25,6 +32,12 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD-SHELL", "rabbitmq-diagnostics check_running -q" ]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
 
   redis:
     image: redis:7
@@ -43,8 +56,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - line_provider_database
-      - rabbitmq
+      bet_maker_database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   bet_maker:
     build:
@@ -55,9 +70,12 @@ services:
     ports:
       - "8090:8090"
     depends_on:
-      - bet_maker_database
-      - rabbitmq
-      - redis
+      bet_maker_database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   bet_maker_consumer:
     build:
@@ -66,9 +84,12 @@ services:
     env_file: bet_maker/.env
     command: [ "python", "src/messaging/main.py" ]
     depends_on:
-      - bet_maker_database
-      - rabbitmq
-      - redis
+      bet_maker_database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
 volumes:
   line_provider_postgres_data:

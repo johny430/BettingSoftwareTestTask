@@ -12,8 +12,7 @@ class RabbitMQSettings(BaseSettings):
     password: str = Field(alias="RABBITMQ_PASSWORD")
     vhost: str = Field(default="", alias="RABBITMQ_VHOST")
 
-    exchange_name: str = Field("guest", alias="RABBITMQ_EXCHANGE_NAME")
-    routing_key: str = Field("guest", alias="RABBITMQ_ROUTING_KEY")
+    exchange_name: str = Field(default="events", alias="RABBITMQ_EXCHANGE_NAME")
 
     @property
     def amqp_url(self) -> URL:

@@ -10,7 +10,6 @@ class RedisSettings(BaseSettings):
     redis_port: int = Field(alias="REDIS_PORT")
     redis_db: int = Field(alias="REDIS_DB")
 
-    cache_ttl: int = 100
     event_cache_key: str = "cached_events"
 
     @property
@@ -27,5 +26,6 @@ class RedisSettings(BaseSettings):
         env_prefix = ""
         env_file = str(Path(__file__).resolve().parents[2] / ".env")
         extra = "allow"
+
 
 redis_settings = RedisSettings()

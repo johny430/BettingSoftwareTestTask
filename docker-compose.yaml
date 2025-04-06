@@ -20,13 +20,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   postgres_line:
     image: postgres:14-alpine
     container_name: postgres_line
     ports:
       - 5435:5432
     environment:
-      POSTGRES_PASSWORD: secret_pass
+      POSTGRES_PASSWORD: line_secret_pass
       POSTGRES_USER: line_user
       POSTGRES_DB: line
     volumes:
@@ -38,6 +39,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
 
   rabbitmq:
     image: rabbitmq:3.10.7-management
@@ -53,6 +55,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   redis:
     image: redis:latest
     container_name: redis_cache
@@ -61,12 +64,13 @@ services:
     networks:
       - app-network
     restart: always
+
   line_provider:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: line_provider
+      dockerfile: line_provider/Dockerfile
     container_name: line_provider
-    command: [ "python", "line_provider/src/main.py" ]
+    command: [ "python", "main.py" ]
     restart: always
     depends_on:
       postgres_line:
@@ -77,10 +81,11 @@ services:
       - app-network
     ports:
       - "8000:8000"
+
   bet_maker:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: bet_maker
+      dockerfile: bet_maker/Dockerfile
     container_name: bet-maker
     command: [ "python", "messaging/main.py" ]
     restart: always
@@ -95,10 +100,11 @@ services:
       - app-network
     ports:
       - "8001:8001"
+
   bet_maker_consumer:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: bet_maker
+      dockerfile: bet_maker/Dockerfile
     container_name: bet-maker-consumer
     command: [ "python", "messaging/main.py" ]
     restart: always

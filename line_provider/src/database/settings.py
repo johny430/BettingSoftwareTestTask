@@ -4,11 +4,16 @@ from yarl import URL
 
 
 class PostgresqlSettings(BaseSettings):
-    db_host: str = Field("127.0.0.1", alias="POSTGRES_HOST")
-    db_port: int = Field(5432, alias="POSTGRES_PORT")
-    db_user: str = Field("postgres", alias="POSTGRES_USER")
-    db_pass: str = Field("1234", alias="POSTGRES_PASSWORD")
-    db_base: str = Field("mrm_db", alias="POSTGRES_DB")
+    # db_host: str = Field("127.0.0.1", alias="POSTGRES_HOST")
+    # db_port: int = Field(5432, alias="POSTGRES_PORT")
+    # db_user: str = Field("postgres", alias="POSTGRES_USER")
+    # db_pass: str = Field("1234", alias="POSTGRES_PASSWORD")
+    # db_base: str = Field("mrm_db", alias="POSTGRES_DB")
+    db_host: str = Field(alias="POSTGRES_HOST")
+    db_port: int = Field(alias="POSTGRES_PORT")
+    db_user: str = Field(alias="POSTGRES_USER")
+    db_pass: str = Field(alias="POSTGRES_PASSWORD")
+    db_base: str = Field(alias="POSTGRES_DB")
 
     @property
     def db_url(self) -> URL:
@@ -22,8 +27,7 @@ class PostgresqlSettings(BaseSettings):
         )
 
     class Config:
-        populate_by_name = True
-        env_prefix = ""
+        env_file = ".env"
 
 
 postgres_settings = PostgresqlSettings()

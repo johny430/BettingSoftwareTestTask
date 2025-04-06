@@ -1,44 +1,41 @@
 version: '3.9'
 
 services:
-  postgres_bet:
-    image: postgres:14-alpine
-    container_name: postgres_bet
-    ports:
-      - "5434:5433"
-    environment:
-      POSTGRES_PASSWORD: secret_pass
-      POSTGRES_USER: bet_user
-      POSTGRES_DB: bet
-    volumes:
-      - postgres_data_bet:/var/lib/postgresql/data
-    networks:
-      - app-network
-    command: -p 5433
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U bet_user -d bet -p 5433" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+#  postgres_bet:
+#    image: postgres:14-alpine
+#    container_name: postgres_bet
+#    ports:
+#      - "5434:5433"
+#    environment:
+#      POSTGRES_PASSWORD: secret_pass
+#      POSTGRES_USER: bet_user
+#      POSTGRES_DB: bet
+#    volumes:
+#      - postgres_data_bet:/var/lib/postgresql/data
+#    networks:
+#      - app-network
+#    command: -p 5433
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U bet_user -d bet -p 5433" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
 
   postgres_line:
-    image: postgres:14-alpine
     container_name: postgres_line
-    ports:
-      - 5435:5432
-    environment:
-      POSTGRES_PASSWORD: line_secret_pass
-      POSTGRES_USER: line_user
-      POSTGRES_DB: line
+    image: postgres:alpine
+    restart: unless-stopped
     volumes:
       - postgres_data_line:/var/lib/postgresql/data
-    networks:
-      - app-network
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U line_user -d line" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    environment:
+      - POSTGRES_DB=line_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - 5432:5432
+    command: [ "postgres", "-c", "log_statement=all", "-c", "log_min_duration_statement=1" ]
+    security_opt:
+      - no-new-privileges:true
 
 
   rabbitmq:
@@ -65,58 +62,58 @@ services:
       - app-network
     restart: always
 
-  line_provider:
-    build:
-      context: line_provider
-      dockerfile: line_provider/Dockerfile
-    container_name: line_provider
-    command: [ "python", "main.py" ]
-    restart: always
-    depends_on:
-      postgres_line:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - app-network
-    ports:
-      - "8000:8000"
+#  line_provider:
+#    build:
+#      context: line_provider
+#      dockerfile: line_provider/Dockerfile
+#    container_name: line_provider
+#    command: [ "python", "main.py" ]
+#    restart: always
+#    depends_on:
+#      postgres_line:
+#        condition: service_healthy
+#      rabbitmq:
+#        condition: service_healthy
+#    networks:
+#      - app-network
+#    ports:
+#      - "8000:8000"
 
-  bet_maker:
-    build:
-      context: bet_maker
-      dockerfile: bet_maker/Dockerfile
-    container_name: bet-maker
-    command: [ "python", "messaging/main.py" ]
-    restart: always
-    depends_on:
-      postgres_bet:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
-      line_provider:
-        condition: service_started
-    networks:
-      - app-network
-    ports:
-      - "8001:8001"
-
-  bet_maker_consumer:
-    build:
-      context: bet_maker
-      dockerfile: bet_maker/Dockerfile
-    container_name: bet-maker-consumer
-    command: [ "python", "messaging/main.py" ]
-    restart: always
-    depends_on:
-      postgres_bet:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
-      line_provider:
-        condition: service_started
-    networks:
-      - app-network
+#  bet_maker:
+#    build:
+#      context: bet_maker
+#      dockerfile: bet_maker/Dockerfile
+#    container_name: bet-maker
+#    command: [ "python", "main.py" ]
+#    restart: always
+#    depends_on:
+#      postgres_bet:
+#        condition: service_healthy
+#      rabbitmq:
+#        condition: service_started
+#      line_provider:
+#        condition: service_started
+#    networks:
+#      - app-network
+#    ports:
+#      - "8001:8001"
+#
+#  bet_maker_consumer:
+#    build:
+#      context: bet_maker
+#      dockerfile: bet_maker/Dockerfile
+#    container_name: bet-maker-consumer
+#    command: [ "python", "messaging/main.py" ]
+#    restart: always
+#    depends_on:
+#      postgres_bet:
+#        condition: service_healthy
+#      rabbitmq:
+#        condition: service_started
+#      line_provider:
+#        condition: service_started
+#    networks:
+#      - app-network
 
 networks:
   app-network:

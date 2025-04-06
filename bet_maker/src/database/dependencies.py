@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import (
 from starlette.requests import Request
 
 from database.models.base import mapper_registry
-from src.database.settings import postgres_settings
+from database.settings import postgres_settings
 
 
 def create_database_connection():

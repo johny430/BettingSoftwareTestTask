@@ -2,11 +2,11 @@ import json
 
 from aio_pika import IncomingMessage
 
-from enums.converter import get_bet_status_base_on_event_state
-from enums.event import EventState
-from schemas.event import EventSchema
-from services.bet import BetService
-from services.event import EventService
+from src.enums.converter import get_bet_status_base_on_event_state
+from src.enums.event import EventState
+from src.schemas.event import EventSchema
+from src.services.bet import BetService
+from src.services.event import EventService
 
 
 async def process_created_events(message: IncomingMessage, event_service: EventService):

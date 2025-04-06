@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from app.lifetime import lifespan
-from web.router import router
+from src.app.lifetime import lifespan
+from src.web.router import router
 
 
 def get_app() -> FastAPI:

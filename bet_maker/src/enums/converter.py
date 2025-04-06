@@ -1,5 +1,5 @@
-from enums.bet import BetState
-from enums.event import EventState
+from src.enums.bet import BetState
+from src.enums.event import EventState
 
 
 def get_bet_status_base_on_event_state(event_status: EventState):

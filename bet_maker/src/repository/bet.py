@@ -4,9 +4,9 @@ from typing import Sequence
 from sqlalchemy import select, Update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.models.bet import Bet
-from enums.bet import BetState
-from schemas.bet import BetCreate
+from src.database.models.bet import Bet
+from src.enums.bet import BetState
+from src.schemas.bet import BetCreate
 
 logger = logging.getLogger(__name__)
 

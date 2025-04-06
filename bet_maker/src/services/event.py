@@ -1,6 +1,6 @@
-from caching.client import RedisClient
-from repository.event import EventRepository
-from schemas.event import EventSchema
+from src.caching.client import RedisClient
+from src.repository.event import EventRepository
+from src.schemas.event import EventSchema
 
 
 class EventService:

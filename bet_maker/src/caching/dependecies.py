@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.requests import Request
 
-from caching.client import RedisClient
+from src.caching.client import RedisClient
 
 
 async def setup_redis(app: FastAPI) -> None:

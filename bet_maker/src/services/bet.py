@@ -2,11 +2,11 @@ from typing import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from repository.bet import BetRepository
-from caching.client import RedisClient
-from database.models.bet import Bet
-from enums.bet import BetState
-from repository.event import EventRepository
+from src.repository.bet import BetRepository
+from src.caching.client import RedisClient
+from src.database.models.bet import Bet
+from src.enums.bet import BetState
+from src.repository.event import EventRepository
 
 
 class BetService:

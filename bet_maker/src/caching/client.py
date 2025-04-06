@@ -1,8 +1,9 @@
 import aioredis
 from aioredis import Redis
 
-from caching.settings import redis_settings
-from utils import safe_json_loads
+from src.caching.settings import redis_settings
+
+from src.utils import safe_json_loads
 
 
 class RedisClient:

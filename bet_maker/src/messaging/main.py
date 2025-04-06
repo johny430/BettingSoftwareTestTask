@@ -1,11 +1,11 @@
 from functools import partial
 
-from caching.client import RedisClient
-from database.dependencies import create_database_connection
-from messaging.client import RabbitMQClient
-from messaging.handlers import process_updated_events, process_created_events
-from services.bet import BetService
-from services.event import EventService
+from src.caching.client import RedisClient
+from src.database.dependencies import create_database_connection
+from src.messaging.client import RabbitMQClient
+from src.messaging.handlers import process_updated_events, process_created_events
+from src.services.bet import BetService
+from src.services.event import EventService
 
 
 async def main():

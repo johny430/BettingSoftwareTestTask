@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from caching.client import RedisClient
-from caching.settings import redis_settings
-from schemas.event import EventResponse, EventSchema
+from src.caching.client import RedisClient
+from src.caching.settings import redis_settings
+from src.schemas.event import EventResponse, EventSchema
 
 
 class EventRepository:

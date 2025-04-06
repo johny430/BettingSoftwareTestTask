@@ -2,10 +2,10 @@ from typing import Sequence, Annotated
 
 from fastapi import APIRouter, HTTPException, Depends
 
-from schemas.bet import BetResponse, BetCreated, BetCreate
-from services.bet import BetService
-from services.dependecies import get_event_service, get_bet_service
-from services.event import EventService
+from src.schemas.bet import BetResponse, BetCreated, BetCreate
+from src.services.bet import BetService
+from src.services.dependecies import get_event_service, get_bet_service
+from src.services.event import EventService
 
 bet_router = APIRouter()
 

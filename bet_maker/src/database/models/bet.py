@@ -2,8 +2,8 @@ from decimal import Decimal
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database.models.base import TimedBaseModel
-from enums.bet import BetState
+from src.database.models.base import TimedBaseModel
+from src.enums.bet import BetState
 
 
 class Bet(TimedBaseModel):

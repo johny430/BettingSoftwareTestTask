@@ -7,8 +7,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
-        populate_by_name = True
-        env_prefix = ""
 
 
 app_settings = Settings()

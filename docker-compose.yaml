@@ -129,8 +129,15 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data2:/var/lib/postgresql/data
+      - line_provider_postgres_data:/var/lib/postgresql/data
 
+  bet_maker_database:
+    image: postgres:alpine
+    env_file: bet_maker/.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - bet_maker_postgres_data:/var/lib/postgresql/data
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -161,7 +168,20 @@ services:
       - line_provider_database
       - rabbitmq
 
+  bet_maker:
+    build:
+      context: bet_maker
+      dockerfile: Dockerfile
+    env_file: line_provider/.env
+    command: [ "python", "src/main.py" ]
+    ports:
+      - "8090:8090"
+    depends_on:
+      - line_provider_database
+      - rabbitmq
+
 volumes:
-  postgres_data2:
+  line_provider_postgres_data:
+  bet_maker_postgres_data:
   redis_data:
   rabbitmq_data:

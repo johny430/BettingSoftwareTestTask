@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import Field
 from pydantic_settings import BaseSettings
 from yarl import URL
@@ -27,6 +29,7 @@ class RabbitMQSettings(BaseSettings):
     class Config:
         populate_by_name = True
         env_prefix = ""
-
+        env_file = str(Path(__file__).resolve().parents[2] / ".env")
+        extra = "allow"
 
 rabbitmq_settings = RabbitMQSettings()

@@ -1,13 +1,13 @@
 import aio_pika
 from aio_pika import ExchangeType
 
-from src.messaging.settings import rabbitmq_settings
+from src.app.settings import settings
 
 
 class RabbitMQClient:
     def __init__(self):
-        self.amqp_url = rabbitmq_settings.amqp_url
-        self.exchange_name = rabbitmq_settings.exchange_name
+        self.amqp_url = settings.rabbitmq_settings.amqp_url
+        self.exchange_name = settings.rabbitmq_settings.exchange_name
         self.event_created_queue = None
         self.event_status_updated_queue = None
         self.connection = None

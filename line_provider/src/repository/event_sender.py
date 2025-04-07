@@ -2,7 +2,7 @@ from src.database.models.event import Event
 from src.messaging.client import RabbitMQPublisher
 
 
-class EventsenderRepository:
+class EventSenderRepository:
     def __init__(self, publisher: RabbitMQPublisher):
         self.publisher = publisher
 

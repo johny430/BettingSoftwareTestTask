@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, condecimal
 
-from enums.event import EventState
+from src.enums.event import EventState
 
 
 class EventCreate(BaseModel):

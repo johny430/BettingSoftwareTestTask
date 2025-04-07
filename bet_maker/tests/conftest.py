@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock
 import pytest
 from src.schemas.bet import BetCreate, BetResponse
 
+from src.enums.bet import BetStatus
 from src.schemas.event import EventResponse
 
 
@@ -24,7 +25,7 @@ def sample_bet() -> BetCreate:
 
 @pytest.fixture
 def sample_bets() -> list[BetResponse]:
-    return [BetResponse(id=1, state="PENDING", sum=Decimal("100.00"), event_id=1)]
+    return [BetResponse(id=1, status=BetStatus.PENDING, sum=Decimal("100.00"), event_id=1)]
 
 
 @pytest.fixture

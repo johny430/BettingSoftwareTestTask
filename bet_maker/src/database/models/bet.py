@@ -10,6 +10,6 @@ class Bet(TimedBaseModel):
     __tablename__ = "bets"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    state: Mapped[BetStatus] = mapped_column(default=BetStatus.PENDING)
+    status: Mapped[BetStatus] = mapped_column(default=BetStatus.PENDING)
     sum: Mapped[Decimal]
     event_id: Mapped[int]

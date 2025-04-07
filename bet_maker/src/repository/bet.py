@@ -29,7 +29,7 @@ class BetRepository:
 
     async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus):
         try:
-            query = Update(Bet).where(Bet.event_id == event_id).values(state=status)
+            query = Update(Bet).where(Bet.event_id == event_id).values(status=status)
             await self.session.execute(query)
             await self.session.commit()
             return True

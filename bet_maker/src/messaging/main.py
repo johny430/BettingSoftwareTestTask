@@ -1,17 +1,14 @@
-import logging
 from functools import partial
 
 from src.caching.client import RedisClient
 from src.messaging.handlers import process_updated_events, process_created_events
+from src.repository.bet import BetRepository
 from src.services.bet import BetService
 
-from src.repository.bet import BetRepository
-from src.repository.event import EventRepository
 from src.database.dependencies import create_database_connection
 from src.messaging.client import RabbitMQClient
+from src.repository.event import EventRepository
 from src.services.event import EventService
-
-logger = logging.getLogger(__name__)
 
 
 async def main():

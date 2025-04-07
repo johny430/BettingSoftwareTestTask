@@ -22,10 +22,8 @@ class EventRepository:
             self.session.add(new_event)
             await self.session.commit()
             await self.session.refresh(new_event)
-            logging.getLogger(__name__).error(new_event)
             return new_event
-        except SQLAlchemyError as e:
-            logging.getLogger(__name__).error(e)
+        except SQLAlchemyError:
             return None
 
     async def get_by_id(self, event_id: int) -> Event | None:
@@ -34,8 +32,7 @@ class EventRepository:
         return result.scalar_one_or_none()
 
     async def get_all(self) -> Sequence[Event]:
-        query = select(Event)
-        result = await self.session.execute(query)
+        result = await self.session.execute(select(Event))
         return result.scalars().all()
 
     async def update_status(self, event_id: int, new_status: EventStatus) -> Event | None:

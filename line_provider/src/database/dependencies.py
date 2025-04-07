@@ -31,7 +31,7 @@ async def close_database_connection(app: FastAPI):
 
 
 async def get_database_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
-    async with request.app.status.db_session_factory() as session:
+    async with request.app.state.db_session_factory() as session:
         try:
             yield session
         except Exception:

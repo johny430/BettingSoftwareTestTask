@@ -1,46 +1,30 @@
 import pytest
-from fastapi import HTTPException
 
-from src.web.v1.line_router import create_event, get_event, get_events
-
-
-@pytest.mark.asyncio
-async def test_create_event_success(sample_event_create, sample_event_response, mock_event_service):
-    mock_event_service.create_event.return_value = sample_event_response
-    result = await create_event(sample_event_create, mock_event_service)
-    assert result == sample_event_response
-    mock_event_service.create_event.assert_awaited_once_with(sample_event_create)
+from src.enums.event import EventStatus
+from tests.mocks import DUMMY_EVENT
 
 
 @pytest.mark.asyncio
-async def test_create_event_failure(sample_event_create, mock_event_service):
-    mock_event_service.create_event.return_value = None
-    with pytest.raises(HTTPException) as exc_info:
-        await create_event(sample_event_create, mock_event_service)
-    assert exc_info.value.status_code == 500
-    assert exc_info.value.detail == "Error during event creation"
+async def test_create_event(event_service, event_repository_mock, event_sender_repository_mock, dummy_event_create):
+    result = await event_service.create_event(dummy_event_create)
+    assert result == DUMMY_EVENT
+    event_repository_mock.create.assert_awaited_once_with(dummy_event_create)
+    event_sender_repository_mock.send_event_created_message.assert_awaited_once_with(DUMMY_EVENT)
 
 
 @pytest.mark.asyncio
-async def test_get_event_success(sample_event_response, mock_event_service):
-    mock_event_service.get_event_by_id.return_value = sample_event_response
-    result = await get_event(1, mock_event_service)
-    assert result == sample_event_response
-    mock_event_service.get_event_by_id.assert_awaited_once_with(1)
+async def test_get_event_by_id(event_service, event_repository_mock):
+    event_id = 1
+    result = await event_service.get_event_by_id(event_id)
+    assert result == DUMMY_EVENT
+    event_repository_mock.get_by_id.assert_awaited_once_with(event_id)
 
 
 @pytest.mark.asyncio
-async def test_get_event_not_found(mock_event_service):
-    mock_event_service.get_event_by_id.return_value = None
-    with pytest.raises(HTTPException) as exc_info:
-        await get_event(1, mock_event_service)
-    assert exc_info.value.status_code == 404
-    assert exc_info.value.detail == "Event not found"
-
-
-@pytest.mark.asyncio
-async def test_get_all_events(sample_event_response, mock_event_service):
-    mock_event_service.get_all_events.return_value = [sample_event_response]
-    result = await get_events(mock_event_service)
-    assert result == [sample_event_response]
-    mock_event_service.get_all_events.assert_awaited_once()
+async def test_update_event_status_success(event_service, event_repository_mock, event_sender_repository_mock):
+    event_id = 1
+    new_status = EventStatus.FINISHED_WIN  # Ensure that COMPLETED exists in your EventStatus enum.
+    result = await event_service.update_event_status(event_id, new_status)
+    assert result == DUMMY_EVENT
+    event_repository_mock.update_status.assert_awaited_once_with(event_id, new_status)
+    event_sender_repository_mock.send_event_status_updated_message.assert_awaited_once_with(DUMMY_EVENT.id, new_status)

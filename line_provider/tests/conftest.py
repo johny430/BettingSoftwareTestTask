@@ -1,32 +1,38 @@
-from datetime import datetime
-from decimal import Decimal
 from unittest.mock import AsyncMock
 
 import pytest
 
-from src.enums.event import EventStatus
-from src.schemas.event import EventResponse, EventCreate
+from src.services.event import EventService
+from tests.mocks import DUMMY_EVENT, DUMMY_EVENT_CREATE
 
 
 @pytest.fixture
-def sample_event_create() -> EventCreate:
-    return EventCreate(
-        coefficient=Decimal("2.50"),
-        deadline=datetime.now(),
-        state=EventStatus.NEW
+def event_repository_mock():
+    repo = AsyncMock()
+    repo.create.return_value = DUMMY_EVENT
+    repo.get_by_id.return_value = DUMMY_EVENT
+    repo.get_all.return_value = [DUMMY_EVENT]
+    repo.update_status.return_value = DUMMY_EVENT
+    return repo
+
+
+@pytest.fixture
+def event_sender_repository_mock():
+    repo = AsyncMock()
+    # Simulate methods that don't return a value.
+    repo.send_event_created_message.return_value = None
+    repo.send_event_status_updated_message.return_value = None
+    return repo
+
+
+@pytest.fixture
+def event_service(event_repository_mock, event_sender_repository_mock):
+    return EventService(
+        event_repository=event_repository_mock,
+        event_sender_repository=event_sender_repository_mock
     )
 
 
 @pytest.fixture
-def sample_event_response() -> EventResponse:
-    return EventResponse(
-        id=1,
-        coefficient=Decimal("2.50"),
-        deadline=int(datetime.now().timestamp()),
-        state=EventStatus.NEW
-    )
-
-
-@pytest.fixture
-def mock_event_service() -> AsyncMock:
-    return AsyncMock()
+def dummy_event_create():
+    return DUMMY_EVENT_CREATE

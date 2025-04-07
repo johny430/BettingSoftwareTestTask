@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from pydantic_settings import BaseSettings
 from src.caching.settings import RedisSettings
 
@@ -16,7 +14,6 @@ class Settings(BaseSettings):
     postgres_settings: PostgresqlSettings = PostgresqlSettings()
 
     class Config:
-        # env_file = str(Path(__file__).resolve().parents[2] / ".env")
         env_file = ".env"
         extra = "allow"
 

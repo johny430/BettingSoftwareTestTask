@@ -2,7 +2,7 @@ import aioredis
 from aioredis import Redis
 from src.utils import safe_json_loads
 
-from app.settings import settings
+from src.app.settings import settings
 
 
 class RedisClient:

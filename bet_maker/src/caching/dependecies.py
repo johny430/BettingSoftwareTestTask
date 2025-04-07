@@ -14,4 +14,4 @@ async def close_redis_connection(app: FastAPI):
 
 
 async def get_redis_client(request: Request):
-    yield request.app.status.cache
+    yield request.app.state.cache

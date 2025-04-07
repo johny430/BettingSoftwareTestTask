@@ -2,16 +2,16 @@ from decimal import Decimal
 
 from pydantic import BaseModel, condecimal
 
-from src.enums.bet import BetState
+from src.enums.bet import BetStatus
 
 
 class BetResponse(BaseModel):
     id: int | None
-    state: BetState
+    state: BetStatus
     sum: Decimal
     event_id: int
 
-    def update_state(self, state: BetState):
+    def update_state(self, state: BetStatus):
         self.state = state
 
 

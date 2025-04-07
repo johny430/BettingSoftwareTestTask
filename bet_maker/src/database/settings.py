@@ -1,5 +1,5 @@
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from yarl import URL
 
 
@@ -21,6 +21,4 @@ class PostgresqlSettings(BaseSettings):
             path=f"/{self.db_base}"
         )
 
-    class Config:
-        env_file = ".env"
-        extra = "allow"
+    model_config = SettingsConfigDict(env_file=".env", extra="allow")

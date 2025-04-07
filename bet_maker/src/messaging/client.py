@@ -25,9 +25,9 @@ class RabbitMQClient:
         self.event_status_updated_queue = await self.channel.declare_queue("event_status_updated_queue", durable=True)
         await self.event_status_updated_queue.bind(self.exchange, routing_key="event.updated")
 
-    async def consume(self, queue1_handler, queue2_handler) -> None:
-        await self.event_created_queue.consume(queue1_handler)
-        await self.event_status_updated_queue.consume(queue2_handler)
+    async def consume(self, event_created_queue_handler, event_status_updated_handler) -> None:
+        await self.event_created_queue.consume(event_created_queue_handler)
+        await self.event_status_updated_queue.consume(event_status_updated_handler)
 
     async def close(self) -> None:
         await self.connection.close()

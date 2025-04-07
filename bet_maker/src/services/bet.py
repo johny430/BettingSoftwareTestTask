@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.repository.bet import BetRepository
 from src.caching.client import RedisClient
 from src.database.models.bet import Bet
-from src.enums.bet import BetState
+from src.enums.bet import BetStatus
 from src.repository.event import EventRepository
 
 
@@ -23,5 +23,5 @@ class BetService:
             return None
         return await self.bet_repository.create_bet(bet)
 
-    async def update_status_by_event_id(self, event_id: int, status: BetState):
+    async def update_status_by_event_id(self, event_id: int, status: BetStatus):
         return await self.bet_repository.update_bets_status_by_event_id(event_id, status)

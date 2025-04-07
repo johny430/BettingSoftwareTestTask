@@ -1,10 +1,10 @@
-from src.enums.bet import BetState
-from src.enums.event import EventState
+from src.enums.bet import BetStatus
+from src.enums.event import EventStatus
 
 
-def get_bet_status_base_on_event_state(event_status: EventState):
-    if event_status == EventState.FINISHED_WIN:
-        return BetState.WIN
+def get_bet_status_based_on_event_status(event_status: EventStatus):
+    if event_status == EventStatus.FINISHED_WIN:
+        return BetStatus.WIN
     elif event_status.FINISHED_LOSE:
-        return BetState.LOSE
-    return BetState.PENDING
+        return BetStatus.LOSE
+    return BetStatus.PENDING

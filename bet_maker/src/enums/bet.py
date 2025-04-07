@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class BetState(Enum):
-    WIN = "WIN"
-    LOSE = "LOSE"
-    PENDING = "PENDING"
+class BetStatus(int, Enum):
+    PENDING = 1
+    WIN = 2
+    LOSE = 3

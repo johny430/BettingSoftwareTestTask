@@ -5,7 +5,7 @@ from sqlalchemy import select, Update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.bet import Bet
-from src.enums.bet import BetState
+from src.enums.bet import BetStatus
 from src.schemas.bet import BetCreate
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ class BetRepository:
             logger.error(e)
             return None
 
-    async def update_bets_status_by_event_id(self, event_id: int, status: BetState):
+    async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus):
         try:
             query = Update(Bet).where(Bet.event_id == event_id).values(state=status)
             await self.session.execute(query)

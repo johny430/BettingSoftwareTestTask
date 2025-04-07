@@ -1,5 +1,5 @@
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from src.caching.settings import RedisSettings
 
 from src.database.settings import PostgresqlSettings
@@ -14,9 +14,7 @@ class Settings(BaseSettings):
     redis_settings: RedisSettings = RedisSettings()
     postgres_settings: PostgresqlSettings = PostgresqlSettings()
 
-    class Config:
-        env_file = ".env"
-        extra = "allow"
+    model_config = SettingsConfigDict(env_file=".env", extra="allow")
 
 
 settings = Settings()

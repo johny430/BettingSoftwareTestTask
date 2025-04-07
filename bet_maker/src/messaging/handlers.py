@@ -2,7 +2,7 @@ import json
 
 from aio_pika import IncomingMessage
 
-from src.enums.converter import get_bet_status_base_on_event_state
+from src.enums.converter import get_bet_status_based_on_event_state
 from src.enums.event import EventState
 from src.schemas.event import EventSchema
 from src.services.bet import BetService
@@ -27,5 +27,5 @@ async def process_updated_events(message: IncomingMessage, bet_service: BetServi
             return
         await bet_service.update_status_by_event_id(
             body['event_id'],
-            get_bet_status_base_on_event_state(EventState(body['state']))
+            get_bet_status_based_on_event_state(EventState(body['state']))
         )

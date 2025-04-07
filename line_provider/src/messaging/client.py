@@ -1,5 +1,3 @@
-import json
-
 import aio_pika
 from aio_pika import ExchangeType, Message
 
@@ -19,12 +17,8 @@ class RabbitMQPublisher:
             settings.rabbitmq_settings.exchange_name, ExchangeType.TOPIC
         )
 
-    async def publish(self, message_body: dict, routing_key: str) -> None:
-        if not self.exchange:
-            await self.connect()
-        await self.exchange.publish(Message(json.dumps(message_body).encode()),
-                                    routing_key=routing_key)
+    async def publish(self, message_body: str, routing_key: str) -> None:
+        await self.exchange.publish(Message(message_body.encode()), routing_key=routing_key)
 
     async def close(self) -> None:
-        if self.connection:
-            await self.connection.close()
+        await self.connection.close()

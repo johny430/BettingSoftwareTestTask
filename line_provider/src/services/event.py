@@ -1,10 +1,9 @@
 from typing import Sequence
 
 from src.database.models.event import Event
-from src.enums.event import EventStatus
 from src.repository.event import EventRepository
 from src.repository.event_sender import EventSenderRepository
-from src.schemas.event import EventCreate, EventResponse
+from src.schemas.event import EventCreate, EventResponse, EventStatusUpdate
 
 
 class EventService:
@@ -24,8 +23,8 @@ class EventService:
     async def get_all_events(self) -> Sequence[Event]:
         return await self.event_repository.get_all()
 
-    async def update_event_status(self, event_id: int, status: EventStatus) -> Event | None:
-        updated_event = await self.event_repository.update_status(event_id, status)
+    async def update_event_status(self, event_status_update: EventStatusUpdate) -> Event | None:
+        updated_event = await self.event_repository.update_status(event_status_update)
         if updated_event:
-            await self.event_sender_repository.send_event_status_updated_message(updated_event.id, status)
+            await self.event_sender_repository.send_event_status_updated_message(event_status_update)
         return updated_event

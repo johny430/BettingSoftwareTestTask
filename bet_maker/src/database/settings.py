@@ -4,21 +4,21 @@ from yarl import URL
 
 
 class PostgresqlSettings(BaseSettings):
-    db_host: str = Field(alias="POSTGRES_HOST")
-    db_port: int = Field(alias="POSTGRES_PORT")
-    db_user: str = Field(alias="POSTGRES_USER")
-    db_pass: str = Field(alias="POSTGRES_PASSWORD")
-    db_base: str = Field(alias="POSTGRES_DB")
+    host: str = Field(alias="POSTGRES_HOST")
+    port: int = Field(alias="POSTGRES_PORT")
+    user: str = Field(alias="POSTGRES_USER")
+    password: str = Field(alias="POSTGRES_PASSWORD")
+    database: str = Field(alias="POSTGRES_DB")
 
     @property
     def db_url(self) -> URL:
         return URL.build(
             scheme="postgresql+asyncpg",
-            host=self.db_host,
-            port=self.db_port,
-            user=self.db_user,
-            password=self.db_pass,
-            path=f"/{self.db_base}"
+            host=self.host,
+            port=self.port,
+            user=self.user,
+            password=self.password,
+            path=f"/{self.database}"
         )
 
     model_config = SettingsConfigDict(env_file=".env", extra="allow")

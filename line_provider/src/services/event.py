@@ -3,7 +3,7 @@ from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.event import Event
-from src.enums.event import EventState
+from src.enums.event import EventStatus
 from src.messaging.client import RabbitMQPublisher
 from src.repository.event import EventRepository
 from src.repository.event_sender import EventsenderRepository
@@ -29,7 +29,7 @@ class EventService:
     async def get_all_events(self) -> Sequence[Event]:
         return await self.repository.get_all()
 
-    async def update_event_status(self, event_id: int, new_status: EventState) -> Event | None:
+    async def update_event_status(self, event_id: int, new_status: EventStatus) -> Event | None:
         updated_event = await self.repository.update_status(event_id, new_status)
         if updated_event:
             await self.event_sender.send_event_status_updated_message(updated_event)

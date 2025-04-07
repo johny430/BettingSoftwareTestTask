@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.event import Event
-from src.enums.event import EventState
+from src.enums.event import EventStatus
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +35,9 @@ class EventRepository:
         result = await self.session.execute(query)
         return result.scalars().all()
 
-    async def update_status(self, event_id: int, new_status: EventState) -> Event | None:
+    async def update_status(self, event_id: int, new_status: EventStatus) -> Event | None:
         event = await self.get_by_id(event_id)
         if event is None:
             return None
-        event.state = new_status.name
+        event.status = new_status.name
         return await self.create(event)

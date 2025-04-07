@@ -11,8 +11,8 @@ class EventsenderRepository:
             "event_id": event.id,
             "coefficient": float(event.coefficient),
             "deadline": event.deadline.timestamp(),
-            "state": event.state.value,
+            "state": event.status.value,
         }, "event.created")
 
     async def send_event_status_updated_message(self, event: Event):
-        await self.publisher.publish({'event_id': event.id, 'state': event.state}, "event.updated")
+        await self.publisher.publish({'event_id': event.id, 'state': event.status}, "event.updated")

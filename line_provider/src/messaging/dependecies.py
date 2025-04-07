@@ -10,4 +10,4 @@ async def setup_rabbitmq(app: FastAPI) -> None:
 
 
 async def get_rabbitmq_client(request: Request):
-    yield request.app.state.publisher
+    yield request.app.status.publisher

@@ -1,4 +1,5 @@
 import json
+import logging
 
 from aio_pika import IncomingMessage
 from src.enums.converter import get_bet_status_based_on_event_status
@@ -8,6 +9,7 @@ from src.enums.event import EventStatus
 from src.schemas.event import EventCreate
 from src.services.event import EventService
 
+logger = logging.getLogger(__name__)
 
 async def process_created_events(message: IncomingMessage, event_service: EventService):
     async with message.process():
@@ -16,7 +18,7 @@ async def process_created_events(message: IncomingMessage, event_service: EventS
             id=body['event_id'],
             coefficient=body['coefficient'],
             deadline=int(body['deadline']),
-            state=body['state']
+            status=body['state']
         ))
 
 
@@ -24,7 +26,10 @@ async def process_updated_events(message: IncomingMessage, bet_service: BetServi
     async with message.process():
         body = json.loads(message.body.decode())
         if 'event_id' not in body or 'state' not in body:
+            logger.error("asdasdasd")
             return
+        logger.error(f"new_st: {get_bet_status_based_on_event_status(EventStatus(body['state']))}")
+        logger.error(f"event_id: {body['event_id']}")
         await bet_service.update_status_by_event_id(
             body['event_id'],
             get_bet_status_based_on_event_status(EventStatus(body['state']))

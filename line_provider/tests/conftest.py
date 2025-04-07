@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from src.enums.event import EventState
+from src.enums.event import EventStatus
 from src.schemas.event import EventResponse, EventCreate
 
 
@@ -13,7 +13,7 @@ def sample_event_create() -> EventCreate:
     return EventCreate(
         coefficient=Decimal("2.50"),
         deadline=datetime.now(),
-        state=EventState.NEW
+        state=EventStatus.NEW
     )
 
 
@@ -23,7 +23,7 @@ def sample_event_response() -> EventResponse:
         id=1,
         coefficient=Decimal("2.50"),
         deadline=int(datetime.now().timestamp()),
-        state=EventState.NEW
+        state=EventStatus.NEW
     )
 
 

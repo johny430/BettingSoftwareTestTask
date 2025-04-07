@@ -26,5 +26,6 @@ class RabbitMQSettings(BaseSettings):
         )
 
     class Config:
-        env_file = str(Path(__file__).resolve().parents[2] / ".env")
+        # env_file = str(Path(__file__).resolve().parents[2] / ".env")
+        env_file = ".env"
         extra = "allow"

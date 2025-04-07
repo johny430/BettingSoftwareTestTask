@@ -4,7 +4,7 @@ from src.database.models.event import Event
 from src.enums.event import EventStatus
 from src.repository.event import EventRepository
 from src.repository.event_sender import EventSenderRepository
-from src.schemas.event import EventCreate
+from src.schemas.event import EventCreate, EventResponse
 
 
 class EventService:
@@ -13,10 +13,8 @@ class EventService:
         self.event_repository = event_repository
         self.event_sender_repository = event_sender_repository
 
-    async def create_event(self, event_data: EventCreate) -> Event | None:
-        created_event = await self.event_repository.create(
-            Event(deadline=event_data.deadline.replace(tzinfo=None), coefficient=event_data.coefficient)
-        )
+    async def create_event(self, event: EventCreate) -> EventResponse | None:
+        created_event = await self.event_repository.create(event)
         await self.event_sender_repository.send_event_created_message(created_event)
         return created_event
 

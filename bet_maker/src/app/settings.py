@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings
 from src.caching.settings import RedisSettings
 
@@ -6,8 +7,8 @@ from src.messaging.settings import RabbitMQSettings
 
 
 class Settings(BaseSettings):
-    host: str = "0.0.0.0"
-    port: int = 8090
+    host: str = Field(default="0.0.0.0")
+    port: int = Field(default=8090)
 
     rabbitmq_settings: RabbitMQSettings = RabbitMQSettings()
     redis_settings: RedisSettings = RedisSettings()

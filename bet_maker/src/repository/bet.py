@@ -3,9 +3,9 @@ from typing import Sequence
 from sqlalchemy import select, Update
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.database.models.bet import Bet
+from src.database.models.bet import Bet as BetORM
 from src.enums.bet import BetStatus
-from src.schemas.bet import BetCreate
+from src.schemas.bet import BetCreate, Bet
 
 
 class BetRepository:
@@ -14,23 +14,22 @@ class BetRepository:
         self.session = session
 
     async def get_all_bets(self) -> Sequence[Bet]:
-        query = select(Bet).order_by(Bet.created_at.desc())
-        result = await self.session.execute(query)
-        return result.scalars().all()
+        result = await self.session.execute(select(BetORM).order_by(BetORM.created_at.desc()))
+        return [Bet.model_validate(value) for value in result.scalars().all()]
 
-    async def create_bet(self, bet: BetCreate) -> int | None:
+    async def create_bet(self, bet: BetCreate) -> Bet | None:
         try:
-            new_bet = Bet(sum=bet.sum, event_id=bet.event_id)
-            self.session.add(new_bet)
+            created_bet = BetORM(sum=bet.sum, event_id=bet.event_id)
+            self.session.add(created_bet)
             await self.session.commit()
-            return new_bet.id
+            await self.session.refresh(created_bet)
+            return Bet.model_validate(created_bet)
         except SQLAlchemyError:
             return None
 
-    async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus):
+    async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus) -> Bet:
         try:
-            query = Update(Bet).where(Bet.event_id == event_id).values(status=status)
-            await self.session.execute(query)
+            await self.session.execute(Update(BetORM).where(BetORM.event_id == event_id).values(status=status))
             await self.session.commit()
             return True
         except SQLAlchemyError:

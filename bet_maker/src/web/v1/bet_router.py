@@ -1,7 +1,7 @@
 from typing import Sequence, Annotated
 
 from fastapi import APIRouter, HTTPException, Depends
-from src.schemas.bet import BetResponse, BetCreated, BetCreate
+from src.schemas.bet import BetResponse, BetCreate
 from src.services.bet import BetService
 
 from schemas.event import EventResponse
@@ -16,15 +16,15 @@ async def get_all_available_events(event_service: Annotated[EventService, Depend
     return await event_service.get_all()
 
 
-@bet_router.post("/bet", response_model=BetCreated)
+@bet_router.post("/bet", response_model=BetResponse)
 async def make_bet(
-        bet_sum_dto: BetCreate,
+        bet: BetCreate,
         bet_service: Annotated[BetService, Depends(get_bet_service)]
 ):
-    new_bet_id = await bet_service.create_bet(bet_sum_dto)
-    if new_bet_id is None:
+    created_bet = await bet_service.create_bet(bet)
+    if created_bet is None:
         raise HTTPException(status_code=500, detail="Ошибка при создании ставки")
-    return BetCreated(id=new_bet_id)
+    return created_bet
 
 
 @bet_router.get("/bets", response_model=Sequence[BetResponse])

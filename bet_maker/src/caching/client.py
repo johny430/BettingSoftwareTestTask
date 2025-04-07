@@ -17,12 +17,14 @@ class RedisClient:
 
     async def get_by_prefix(self, key_prefix: str):
         keys = await self.redis.keys(f"{key_prefix}*")
-        if not keys:
-            return []
-        return [value for value in map(safe_json_loads, await self.redis.mget(*keys)) if value is not None]
+        return [
+            value for value in map(safe_json_loads, await self.redis.mget(*keys)) if
+            value is not None
+        ] if keys else []
 
     async def get(self, key):
-        return safe_json_loads(await self.redis.get(key))
+        result = await self.redis.get(key)
+        return safe_json_loads(result) if result else None
 
     async def set(self, key: str, value: str, ttl: int):
         return await self.redis.setex(key, ttl, value)

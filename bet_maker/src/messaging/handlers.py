@@ -5,13 +5,13 @@ from src.enums.converter import get_bet_status_based_on_event_status
 from src.services.bet import BetService
 
 from src.enums.event import EventStatus
-from src.schemas.event import EventCreate
+from src.schemas.event import Event
 from src.services.event import EventService
 
 
 async def process_created_events(message: IncomingMessage, event_service: EventService):
     async with message.process():
-        await event_service.add_event(EventCreate(**json.loads(message.body.decode())))
+        await event_service.add_event(Event(**json.loads(message.body.decode())))
 
 
 async def process_updated_events(message: IncomingMessage, bet_service: BetService):

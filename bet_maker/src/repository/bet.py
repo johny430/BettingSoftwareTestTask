@@ -1,14 +1,11 @@
-import logging
 from typing import Sequence
 
 from sqlalchemy import select, Update
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.database.models.bet import Bet
 from src.enums.bet import BetStatus
 from src.schemas.bet import BetCreate
-
-logger = logging.getLogger(__name__)
 
 
 class BetRepository:
@@ -27,8 +24,7 @@ class BetRepository:
             self.session.add(new_bet)
             await self.session.commit()
             return new_bet.id
-        except Exception as e:
-            logger.error(e)
+        except SQLAlchemyError:
             return None
 
     async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus):
@@ -37,5 +33,5 @@ class BetRepository:
             await self.session.execute(query)
             await self.session.commit()
             return True
-        except Exception as e:
+        except SQLAlchemyError:
             return False

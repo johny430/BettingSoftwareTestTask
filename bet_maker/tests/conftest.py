@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock
 import pytest
 from src.schemas.bet import BetCreate, BetResponse
 
-from src.schemas.event import EventSchema
+from src.schemas.event import EventResponse
 
 
 @pytest.fixture
@@ -28,5 +28,5 @@ def sample_bets() -> list[BetResponse]:
 
 
 @pytest.fixture
-def sample_event() -> EventSchema:
-    return EventSchema(id=1, coefficient=Decimal("1.5"), deadline=None, state=None)
+def sample_event() -> EventResponse:
+    return EventResponse(id=1, coefficient=Decimal("1.5"), deadline=None, state=None)

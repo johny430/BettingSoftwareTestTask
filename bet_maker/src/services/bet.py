@@ -9,7 +9,7 @@ from src.repository.event import EventRepository
 
 class BetService:
 
-    def __int__(self, bet_repository: BetRepository, event_repository: EventRepository):
+    def __init__(self, bet_repository: BetRepository, event_repository: EventRepository):
         self.bet_repository = bet_repository
         self.event_repository = event_repository
 

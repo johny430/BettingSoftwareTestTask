@@ -9,7 +9,7 @@ class EventResponse(BaseModel):
     id: int
     coefficient: Decimal
     deadline: int
-    state: EventStatus
+    status: EventStatus
 
 
 class EventCreate(EventResponse):

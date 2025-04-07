@@ -1,34 +1,19 @@
-from typing import Sequence
-
-from database.models.bet import Bet
+from src.enums.bet import BetStatus
 
 
-class BetRepository:
+class DummyBet:
+    def __init__(self, event_id: int, sum: float):
+        self.event_id = event_id
+        self.sum = sum
 
-    def __init__(self):
-        pass
 
-    async def get_all_bets(self) -> Sequence[Bet]:
-        return [
-            Bet(),
-            Bet(),
-            Bet()
-        ]
+DUMMY_BETS = [
+    {
+        "id": 1,
+        "sum": 100,
+        "event_id": 10,
+        "created_at": "2025-04-07T00:00:00"
+    }
+]
 
-    async def create_bet(self, bet: BetCreate) -> int | None:
-        try:
-            new_bet = Bet(sum=bet.sum, event_id=bet.event_id)
-            self.session.add(new_bet)
-            await self.session.commit()
-            return new_bet.id
-        except SQLAlchemyError:
-            return None
-
-    async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus):
-        try:
-            query = Update(Bet).where(Bet.event_id == event_id).values(status=status)
-            await self.session.execute(query)
-            await self.session.commit()
-            return True
-        except SQLAlchemyError:
-            return False
+DUMMY_STATUS = BetStatus.PENDING

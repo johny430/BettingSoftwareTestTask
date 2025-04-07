@@ -1,29 +1,46 @@
-from decimal import Decimal
-from typing import Sequence
+from datetime import datetime
+from unittest.mock import AsyncMock
 
 import pytest
-from src.enums.bet import BetStatus
-from src.schemas.bet import BetCreate, BetResponse
+from src.services.bet import BetService
+from tests.mocks import DUMMY_BETS, DummyBet
 
-from bet_maker.tests.mock import MockBetService
+from src.enums.event import EventStatus
 from src.schemas.event import EventResponse
 
 
 @pytest.fixture
-def mock_bet_service() -> MockBetService:
-    return MockBetService()
+def bet_repository_mock():
+    repo = AsyncMock()
+    repo.get_all_bets.return_value = DUMMY_BETS
+    repo.create_bet.return_value = 1
+    repo.update_bets_status_by_event_id.return_value = True
+    return repo
 
 
 @pytest.fixture
-def sample_bet() -> BetCreate:
-    return BetCreate(sum=Decimal("100.00"), event_id=1)
+def event_repository_mock():
+    repo = AsyncMock()
+    repo.get_by_id.return_value = EventResponse(
+        id=10,
+        coefficient=2,
+        deadline=(int(datetime.now().timestamp() + 120)),
+        status=EventStatus.NEW
+    )
+    repo.get_all.return_value = [EventResponse(
+        id=14,
+        coefficient=23,
+        deadline=(int(datetime.now().timestamp() + 134)),
+        status=EventStatus.NEW
+    )]
+    return repo
 
 
 @pytest.fixture
-def sample_bets() -> Sequence[BetResponse]:
-    return [BetResponse(id=1, status=BetStatus.PENDING, sum=Decimal("100.00"), event_id=1)]
+def bet_service(bet_repository_mock, event_repository_mock):
+    return BetService(bet_repository=bet_repository_mock, event_repository=event_repository_mock)
 
 
 @pytest.fixture
-def sample_event() -> EventResponse:
-    return EventResponse(id=1, coefficient=Decimal("1.5"), deadline=None, state=None)
+def dummy_bet():
+    return DummyBet(event_id=999, sum=50)

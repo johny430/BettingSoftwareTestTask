@@ -1,7 +1,5 @@
 from typing import Sequence
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from src.caching.client import RedisClient
 from src.enums.bet import BetStatus
 from src.repository.bet import BetRepository
 from src.schemas.bet import BetResponse
@@ -11,9 +9,9 @@ from src.repository.event import EventRepository
 
 class BetService:
 
-    def __init__(self, session: AsyncSession, client: RedisClient):
-        self.bet_repository = BetRepository(session)
-        self.event_repository = EventRepository(client)
+    def __int__(self, bet_repository: BetRepository, event_repository: EventRepository):
+        self.bet_repository = bet_repository
+        self.event_repository = event_repository
 
     async def get_all_bets(self) -> Sequence[BetResponse]:
         return await self.bet_repository.get_all_bets()

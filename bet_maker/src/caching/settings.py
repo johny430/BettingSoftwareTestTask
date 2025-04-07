@@ -22,10 +22,5 @@ class RedisSettings(BaseSettings):
         )
 
     class Config:
-        populate_by_name = True
-        env_prefix = ""
         env_file = str(Path(__file__).resolve().parents[2] / ".env")
         extra = "allow"
-
-
-redis_settings = RedisSettings()

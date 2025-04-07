@@ -7,12 +7,12 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine, )
 from starlette.requests import Request
 
+from app.settings import settings
 from src.database.models.base import mapper_registry
-from src.database.settings import postgres_settings
 
 
 def create_database_connection():
-    engine = create_async_engine(str(postgres_settings.db_url), future=True)
+    engine = create_async_engine(str(settings.postgres_settings.db_url), future=True)
     session_maker = async_sessionmaker(
         bind=engine,
         expire_on_commit=False,

@@ -1,9 +1,8 @@
 import aioredis
 from aioredis import Redis
-
-from src.caching.settings import redis_settings
-
 from src.utils import safe_json_loads
+
+from app.settings import settings
 
 
 class RedisClient:
@@ -11,7 +10,7 @@ class RedisClient:
         self.redis: Redis = None
 
     async def connect(self):
-        self.redis = await aioredis.from_url(str(redis_settings.redis_url), decode_responses=True)
+        self.redis = await aioredis.from_url(str(settings.redis_settings.redis_url), decode_responses=True)
 
     async def close(self):
         await self.redis.close()

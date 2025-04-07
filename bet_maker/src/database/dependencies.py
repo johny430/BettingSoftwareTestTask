@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine, )
 from starlette.requests import Request
 
-from app.settings import settings
+from src.app.settings import settings
 from src.database.models.base import mapper_registry
 
 

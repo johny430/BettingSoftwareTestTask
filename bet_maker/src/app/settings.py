@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from pydantic_settings import BaseSettings
+from src.caching.settings import RedisSettings
 
-from caching.settings import RedisSettings
-from database.settings import PostgresqlSettings
-from messaging.settings import RabbitMQSettings
+from src.database.settings import PostgresqlSettings
+from src.messaging.settings import RabbitMQSettings
 
 
 class Settings(BaseSettings):

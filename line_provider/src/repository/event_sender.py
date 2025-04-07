@@ -15,4 +15,4 @@ class EventSenderRepository:
         }, "event.created")
 
     async def send_event_status_updated_message(self, event: Event):
-        await self.publisher.publish({'id': event.id, 'status': event.status}, "event.updated")
+        await self.publisher.publish({'id': event.id, 'status': event.status.value}, "event.updated")

@@ -20,12 +20,12 @@ async def process_created_events(message: IncomingMessage, event_service: EventS
 async def process_updated_events(message: IncomingMessage, bet_service: BetService):
     async with message.process():
         body = json.loads(message.body.decode())
-        if 'event_id' not in body or 'status' not in body:
+        if 'id' not in body or 'status' not in body:
             logger.error("asdasdasd")
             return
         logger.error(f"new_st: {get_bet_status_based_on_event_status(EventStatus(body['status']))}")
-        logger.error(f"event_id: {body['event_id']}")
+        logger.error(f"event_id: {body['id']}")
         await bet_service.update_status_by_event_id(
-            body['event_id'],
+            body['id'],
             get_bet_status_based_on_event_status(EventStatus(body['status']))
         )

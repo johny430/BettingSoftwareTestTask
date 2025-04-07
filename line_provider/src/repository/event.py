@@ -1,3 +1,4 @@
+import logging
 from typing import Sequence
 
 from sqlalchemy import select
@@ -17,11 +18,14 @@ class EventRepository:
     async def create(self, event: EventCreate) -> Event | None:
         try:
             new_event = Event(coefficient=event.coefficient, deadline=event.deadline)
+            logging.getLogger(__name__).error(new_event)
             self.session.add(new_event)
             await self.session.commit()
-            await self.session.refresh(event)
+            await self.session.refresh(new_event)
+            logging.getLogger(__name__).error(new_event)
             return new_event
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
+            logging.getLogger(__name__).error(e)
             return None
 
     async def get_by_id(self, event_id: int) -> Event | None:

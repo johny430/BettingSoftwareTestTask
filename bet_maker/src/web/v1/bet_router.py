@@ -4,14 +4,14 @@ from fastapi import APIRouter, HTTPException, Depends
 from src.schemas.bet import BetResponse, BetCreate
 from src.services.bet import BetService
 
-from schemas.event import EventResponse
+from schemas.event import Event
 from src.services.dependecies import get_event_service, get_bet_service
 from src.services.event import EventService
 
 bet_router = APIRouter()
 
 
-@bet_router.get("/events", response_model=Sequence[EventResponse])
+@bet_router.get("/events", response_model=Sequence[Event])
 async def get_all_available_events(event_service: Annotated[EventService, Depends(get_event_service)]):
     return await event_service.get_all()
 

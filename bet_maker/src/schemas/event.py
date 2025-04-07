@@ -10,9 +10,3 @@ class Event(BaseModel):
     coefficient: Decimal
     deadline: int
     status: EventStatus
-
-
-class EventResponse(BaseModel):
-    coefficient: Decimal
-    deadline: int
-    status: EventStatus

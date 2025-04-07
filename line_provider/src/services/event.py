@@ -24,8 +24,8 @@ class EventService:
     async def get_all_events(self) -> Sequence[Event]:
         return await self.event_repository.get_all()
 
-    async def update_event_status(self, event_id: int, new_status: EventStatus) -> Event | None:
-        updated_event = await self.event_repository.update_status(event_id, new_status)
+    async def update_event_status(self, event_id: int, status: EventStatus) -> Event | None:
+        updated_event = await self.event_repository.update_status(event_id, status)
         if updated_event:
-            await self.event_sender_repository.send_event_status_updated_message(updated_event)
+            await self.event_sender_repository.send_event_status_updated_message(updated_event.id, status)
         return updated_event

@@ -5,6 +5,8 @@ from src.caching.client import RedisClient
 from src.messaging.handlers import process_updated_events, process_created_events
 from src.services.bet import BetService
 
+from src.repository.bet import BetRepository
+from src.repository.event import EventRepository
 from src.database.dependencies import create_database_connection
 from src.messaging.client import RabbitMQClient
 from src.services.event import EventService
@@ -19,8 +21,10 @@ async def main():
     await redis_client.connect()
     engine, session_factory = create_database_connection()
 
-    event_service = EventService(redis_client)
-    bet_service = BetService(session_factory(), redis_client)
+    event_repository = EventRepository(redis_client)
+    bet_repository = BetRepository(session_factory())
+    event_service = EventService(event_repository)
+    bet_service = BetService(bet_repository, event_repository)
 
     await rabbitmq_client.connect()
     await rabbitmq_client.declare_queues()

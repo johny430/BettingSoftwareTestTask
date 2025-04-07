@@ -1,4 +1,5 @@
 from src.database.models.event import Event
+from src.enums.event import EventStatus
 from src.messaging.client import RabbitMQPublisher
 
 
@@ -14,5 +15,5 @@ class EventSenderRepository:
             "status": event.status.value,
         }, "event.created")
 
-    async def send_event_status_updated_message(self, event: Event):
-        await self.publisher.publish({'id': event.id, 'status': event.status.value}, "event.updated")
+    async def send_event_status_updated_message(self, event_id: int, status: EventStatus):
+        await self.publisher.publish({'id': event_id, 'status': status.value}, "event.updated")

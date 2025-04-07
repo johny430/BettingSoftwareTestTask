@@ -4,10 +4,6 @@ from fastapi import HTTPException
 from src.web.v1.line_router import create_event, get_event, get_events
 
 
-# -------------------------------
-# Unit Tests for Event Routes
-# -------------------------------
-
 @pytest.mark.asyncio
 async def test_create_event_success(sample_event_create, sample_event_response, mock_event_service):
     mock_event_service.create_event.return_value = sample_event_response

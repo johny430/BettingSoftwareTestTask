@@ -3,7 +3,7 @@ import json
 import aio_pika
 from aio_pika import ExchangeType, Message
 
-from src.messaging.settings import rabbitmq_settings
+from src.app.settings import settings
 
 
 class RabbitMQPublisher:
@@ -13,10 +13,10 @@ class RabbitMQPublisher:
         self.exchange = None
 
     async def connect(self) -> None:
-        self.connection = await aio_pika.connect_robust(rabbitmq_settings.amqp_url)
+        self.connection = await aio_pika.connect_robust(settings.rabbitmq_settings.amqp_url)
         self.channel = await self.connection.channel()
         self.exchange = await self.channel.declare_exchange(
-            rabbitmq_settings.exchange_name, ExchangeType.TOPIC
+            settings.rabbitmq_settings.exchange_name, ExchangeType.TOPIC
         )
 
     async def publish(self, message_body: dict, routing_key: str) -> None:

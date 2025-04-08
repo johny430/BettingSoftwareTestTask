@@ -24,12 +24,14 @@ class EventRepository:
             return None
 
     async def get_by_id(self, event_id: int) -> Event | None:
-        result = (await self.session.execute(select(EventORM).where(EventORM.id == event_id))).scalar_one_or_none()
-        return Event.model_validate(result) if result else None
+        result = await self.session.execute(select(EventORM).where(EventORM.id == event_id))
+        event = result.scalar_one_or_none()
+        return Event.model_validate(event) if event else None
 
     async def get_all(self) -> Sequence[Event]:
         result = await self.session.execute(select(EventORM))
-        return [Event.model_validate(value) for value in result.scalars().all()]
+        events = result.scalars().all()
+        return [Event.model_validate(event) for event in events]
 
     async def update_status(self, event_status_update: EventStatusUpdate) -> Event | None:
         try:

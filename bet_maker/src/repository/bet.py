@@ -15,7 +15,8 @@ class BetRepository:
 
     async def get_all_bets(self) -> Sequence[Bet]:
         result = await self.session.execute(select(BetORM).order_by(BetORM.created_at.desc()))
-        return [Bet.model_validate(value) for value in result.scalars().all()]
+        bets = result.scalars().all()
+        return [Bet.model_validate(bet) for bet in bets]
 
     async def create_bet(self, bet: BetCreate) -> Bet | None:
         try:
@@ -28,8 +29,9 @@ class BetRepository:
             return None
 
     async def get_by_id(self, event_id: int) -> Bet | None:
-        result = (await self.session.execute(select(BetORM).where(BetORM.id == event_id))).scalar_one_or_none()
-        return Bet.model_validate(result) if result else None
+        result = await self.session.execute(select(BetORM).where(BetORM.id == event_id))
+        bet = result.scalar_one_or_none()
+        return Bet.model_validate(bet) if bet else None
 
     async def update_bets_status_by_event_id(self, event_id: int, status: BetStatus) -> Bet:
         try:

@@ -16,6 +16,9 @@ class BetService:
     async def get_all_bets(self) -> Sequence[Bet]:
         return await self.bet_repository.get_all_bets()
 
+    async def get_by_id(self, bet_id: int) -> Bet:
+        return await self.bet_repository.get_by_id(bet_id)
+
     async def create_bet(self, bet) -> Bet | None:
         if not await self.event_repository.get_by_id(bet.event_id):
             return None

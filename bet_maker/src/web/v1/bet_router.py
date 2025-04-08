@@ -30,3 +30,11 @@ async def make_bet(
 @bet_router.get("/bets", response_model=Sequence[BetResponse])
 async def get_all_bets(bet_service: Annotated[BetService, Depends(get_bet_service)]):
     return await bet_service.get_all_bets()
+
+
+@bet_router.get("/bet/{bet_id}", response_model=BetResponse)
+async def get_all_bets(bet_id: int, bet_service: Annotated[BetService, Depends(get_bet_service)]):
+    bet = await bet_service.get_by_id(bet_id)
+    if bet is None:
+        raise HTTPException(status_code=404, detail="Bet not found")
+    return bet

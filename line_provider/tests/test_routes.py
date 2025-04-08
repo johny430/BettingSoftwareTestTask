@@ -1,6 +1,7 @@
 import pytest
 
 from src.enums.event import EventStatus
+from src.schemas.event import EventStatusUpdate
 from tests.mocks import DUMMY_EVENT
 
 
@@ -23,8 +24,9 @@ async def test_get_event_by_id(event_service, event_repository_mock):
 @pytest.mark.asyncio
 async def test_update_event_status_success(event_service, event_repository_mock, event_sender_repository_mock):
     event_id = 1
-    new_status = EventStatus.FINISHED_WIN  # Ensure that COMPLETED exists in your EventStatus enum.
-    result = await event_service.update_event_status(event_id, new_status)
+    new_status = EventStatus.FINISHED_WIN
+    event_status_update = EventStatusUpdate(id=event_id, status=new_status)
+    result = await event_service.update_event_status(event_status_update)
     assert result == DUMMY_EVENT
-    event_repository_mock.update_status.assert_awaited_once_with(event_id, new_status)
-    event_sender_repository_mock.send_event_status_updated_message.assert_awaited_once_with(DUMMY_EVENT.id, new_status)
+    event_repository_mock.update_status.assert_awaited_once_with(event_status_update)
+    event_sender_repository_mock.send_event_status_updated_message.assert_awaited_once_with(event_status_update)

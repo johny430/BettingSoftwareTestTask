@@ -3,10 +3,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 from src.services.bet import BetService
-from tests.mocks import DUMMY_BETS, DummyBet
 
 from src.enums.event import EventStatus
-from src.schemas.event import EventResponse
+from src.schemas.event import Event
+from tests.mocks import DUMMY_BETS, DummyBet
 
 
 @pytest.fixture
@@ -21,13 +21,13 @@ def bet_repository_mock():
 @pytest.fixture
 def event_repository_mock():
     repo = AsyncMock()
-    repo.get_by_id.return_value = EventResponse(
+    repo.get_by_id.return_value = Event(
         id=10,
         coefficient=2,
         deadline=(int(datetime.now().timestamp() + 120)),
         status=EventStatus.NEW
     )
-    repo.get_all.return_value = [EventResponse(
+    repo.get_all.return_value = [Event(
         id=14,
         coefficient=23,
         deadline=(int(datetime.now().timestamp() + 134)),

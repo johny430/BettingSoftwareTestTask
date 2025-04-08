@@ -38,8 +38,8 @@ class EventStatusUpdate(BaseModel):
     status: EventStatus
 
     @classmethod
-    def as_dependency(cls, id: int = Path(...), status: EventStatus = Query(...)) -> "EventStatusUpdate":
-        return cls(id=id, status=status)
+    def as_dependency(cls, event_id: int = Path(...), status: EventStatus = Query(...)) -> "EventStatusUpdate":
+        return cls(id=event_id, status=status)
 
 
 class EventResponse(BaseModel):

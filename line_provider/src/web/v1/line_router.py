@@ -28,7 +28,7 @@ async def get_event_by_id(event_id: int, event_service: Annotated[EventService, 
     )
 
 
-@line_router.post("/{id}/status", response_model=EventResponse)
+@line_router.post("/{event_id}/status", response_model=EventResponse)
 async def update_event_status(
         event_status_update: Annotated[EventStatusUpdate, Depends(EventStatusUpdate.as_dependency)],
         event_service: Annotated[EventService, Depends(get_event_service)]

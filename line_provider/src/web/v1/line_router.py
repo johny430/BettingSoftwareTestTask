@@ -20,7 +20,7 @@ async def create_event(event_data: EventCreate, event_service: Annotated[EventSe
 
 
 @line_router.get("/{event_id}", response_model=EventResponse)
-async def get_event(event_id: int, event_service: Annotated[EventService, Depends(get_event_service)]):
+async def get_event_by_id(event_id: int, event_service: Annotated[EventService, Depends(get_event_service)]):
     return await get_or_raise(
         await event_service.get_event_by_id(event_id),
         404,

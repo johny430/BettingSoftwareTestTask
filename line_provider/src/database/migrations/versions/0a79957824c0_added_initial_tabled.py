@@ -18,7 +18,7 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
-def downgrade() -> None:
+def upgrade() -> None:
     op.create_table('events',
     sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
     sa.Column('coefficient', sa.NUMERIC(precision=10, scale=2), autoincrement=False, nullable=False),
@@ -31,5 +31,5 @@ def downgrade() -> None:
     )
 
 
-def upgrade() -> None:
+def downgrade() -> None:
     op.drop_table('events')
